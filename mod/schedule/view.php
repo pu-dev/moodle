@@ -30,6 +30,9 @@ if (!$schedule = schedule_get_schedule($cm->instance)) {
     print_error('invalidcoursemodule');
 }
 
+
+
+
 $strschedule = get_string('modulename', 'schedule');
 $strschedules = get_string('modulenameplural', 'schedule');
 
@@ -48,56 +51,59 @@ if ($action == 'delschedule' and confirm_sesskey() and is_enrolled($context, NUL
         redirect("view.php?id=$cm->id");
     }
 }
-
 $PAGE->set_title($schedule->name);
 $PAGE->set_heading($course->fullname);
 
-/// Submit any new data if there is any
-if (data_submitted() && !empty($action) && confirm_sesskey()) {
-    $timenow = time();
-    if (has_capability('mod/schedule:deleteresponses', $context)) {
-        if ($action === 'delete') {
-            // Some responses need to be deleted.
-            schedule_delete_responses($attemptids, $schedule, $cm, $course);
-            redirect("view.php?id=$cm->id");
-        }
-        if (preg_match('/^choose_(\d+)$/', $action, $actionmatch)) {
-            // Modify responses of other users.
-            $newoptionid = (int)$actionmatch[1];
-            schedule_modify_responses($userids, $attemptids, $newoptionid, $schedule, $cm, $course);
-            redirect("view.php?id=$cm->id");
-        }
-    }
 
-    // Redirection after all POSTs breaks block editing, we need to be more specific!
-    if ($schedule->allowmultiple) {
-        $answer = optional_param_array('answer', array(), PARAM_INT);
-    } else {
-        $answer = optional_param('answer', '', PARAM_INT);
-    }
+// /// Submit any new data if there is any
+// if (data_submitted() && !empty($action) && confirm_sesskey()) {
+//     $timenow = time();
+//     if (has_capability('mod/schedule:deleteresponses', $context)) {
+//         if ($action === 'delete') {
+//             // Some responses need to be deleted.
+//             schedule_delete_responses($attemptids, $schedule, $cm, $course);
+//             redirect("view.php?id=$cm->id");
+//         }
+//         if (preg_match('/^choose_(\d+)$/', $action, $actionmatch)) {
+//             // Modify responses of other users.
+//             $newoptionid = (int)$actionmatch[1];
+//             schedule_modify_responses($userids, $attemptids, $newoptionid, $schedule, $cm, $course);
+//             redirect("view.php?id=$cm->id");
+//         }
+//     }
 
-    if (!$scheduleavailable) {
-        $reason = current(array_keys($warnings));
-        throw new moodle_exception($reason, 'schedule', '', $warnings[$reason]);
-    }
+//     // Redirection after all POSTs breaks block editing, we need to be more specific!
+//     if ($schedule->allowmultiple) {
+//         $answer = optional_param_array('answer', array(), PARAM_INT);
+//     } else {
+//         $answer = optional_param('answer', '', PARAM_INT);
+//     }
 
-    if ($answer && is_enrolled($context, null, 'mod/schedule:choose')) {
-        schedule_user_submit_response($answer, $schedule, $USER->id, $course, $cm);
-        redirect(new moodle_url('/mod/schedule/view.php',
-            array('id' => $cm->id, 'notify' => 'schedulesaved', 'sesskey' => sesskey())));
-    } else if (empty($answer) and $action === 'makeschedule') {
-        // We cannot use the 'makeschedule' alone because there might be some legacy renderers without it,
-        // outdated renderers will not get the 'mustchoose' message - bad luck.
-        redirect(new moodle_url('/mod/schedule/view.php',
-            array('id' => $cm->id, 'notify' => 'mustchooseone', 'sesskey' => sesskey())));
-    }
-}
+//     if (!$scheduleavailable) {
+//         $reason = current(array_keys($warnings));
+//         throw new moodle_exception($reason, 'schedule', '', $warnings[$reason]);
+//     }
+
+//     if ($answer && is_enrolled($context, null, 'mod/schedule:choose')) {
+//         schedule_user_submit_response($answer, $schedule, $USER->id, $course, $cm);
+//         redirect(new moodle_url('/mod/schedule/view.php',
+//             array('id' => $cm->id, 'notify' => 'schedulesaved', 'sesskey' => sesskey())));
+//     } else if (empty($answer) and $action === 'makeschedule') {
+//         // We cannot use the 'makeschedule' alone because there might be some legacy renderers without it,
+//         // outdated renderers will not get the 'mustchoose' message - bad luck.
+//         redirect(new moodle_url('/mod/schedule/view.php',
+//             array('id' => $cm->id, 'notify' => 'mustchooseone', 'sesskey' => sesskey())));
+//     }
+// }
 
 // Completion and trigger events.
 schedule_view($schedule, $course, $cm, $context);
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading(format_string($schedule->name), 2, null);
+
+echo $OUTPUT->footer();
+return;
 
 if ($notify and confirm_sesskey()) {
     if ($notify === 'schedulesaved') {
@@ -106,6 +112,18 @@ if ($notify and confirm_sesskey()) {
         echo $OUTPUT->notification(get_string('mustchooseone', 'schedule'), 'notifyproblem');
     }
 }
+
+error_log("dupa");
+error_log($cm->id);
+$renderer = $PAGE->get_renderer('mod_schedule');
+echo $renderer->display_add_teacher_avability_form($cm->id);
+//$options, $cm->id, $schedule->display, $schedule->allowmultiple);
+// echo $render->display_add_teacher_avability_form();
+// return;
+
+
+
+
 
 /// Display the schedule and possibly results
 $eventdata = array();
@@ -135,7 +153,7 @@ echo '<div class="clearer"></div>';
 if ($schedule->intro) {
     echo $OUTPUT->box(format_module_intro('schedule', $schedule, $cm->id), 'generalbox', 'intro');
 }
-
+;
 $timenow = time();
 $current = schedule_get_my_response($schedule);
 //if user has already made a selection, and they are not allowed to update it or if schedule is not open, show their selected answer.
@@ -147,6 +165,14 @@ if (isloggedin() && (!empty($current)) &&
     }
     echo $OUTPUT->box(get_string("yourselection", "schedule", userdate($schedule->timeopen)).": ".implode('; ', $scheduletexts), 'generalbox', 'yourselection');
 }
+
+
+
+
+
+// $renderer = $PAGE->get_renderer('mod_schedule');
+// echo $renderer->display_add_session($options, $cm->id, $schedule->display, $schedule->allowmultiple);
+// ;
 
 /// Print the form
 $scheduleopen = true;
@@ -233,6 +259,7 @@ if (!$scheduleformshown) {
     }
 }
 
+
 // print the results at the bottom of the screen
 if (schedule_can_view_results($schedule, $current, $scheduleopen)) {
     $results = prepare_schedule_show_results($schedule, $course, $cm, $allresponses);
@@ -243,5 +270,6 @@ if (schedule_can_view_results($schedule, $current, $scheduleopen)) {
 } else if (!$scheduleformshown) {
     echo $OUTPUT->box(get_string('noresultsviewable', 'schedule'));
 }
-
+;
 echo $OUTPUT->footer();
+return;

@@ -64,6 +64,163 @@ $SCHEDULE_DISPLAY = array (SCHEDULE_DISPLAY_HORIZONTAL   => get_string('displayh
 
 /// Standard functions /////////////////////////////////////////////////////////
 
+
+
+
+
+
+
+
+/*
+Function adds "edit schedules" edit menu item
+*/
+function schedule_extend_settings_navigation(settings_navigation $settings, navigation_node $schedulenode) {
+    global $PAGE;
+
+
+    $keys = $schedulenode->get_children_key_list();
+    $beforekey = null;
+    $i = array_search('modedit', $keys);
+    if ($i === false and array_key_exists(0, $keys)) {
+        $beforekey = $keys[0];
+    } else if (array_key_exists($i + 1, $keys)) {
+        $beforekey = $keys[$i + 1];
+    }
+
+
+    # TODO
+    # Check capabilities
+
+    // if (has_capability('mod/schedule:manage', $PAGE->cm->context)) {
+        $url = new moodle_url('/mod/schedule/edit.php', array('cmid'=>$PAGE->cm->id));
+            
+        $node = navigation_node::create(
+            "edit schedules - to fix",
+            $url,
+            navigation_node::TYPE_SETTING, 
+            null, 
+            'mod_schedule_edit',
+            new pix_icon('t/edit', '')
+        );
+
+        $schedulenode->add_node($node, $beforekey);
+    // }
+
+    // if (has_capability('mod/schedule:readresponses', $PAGE->cm->context)) {
+
+    //     $groupmode = groups_get_activity_groupmode($PAGE->cm);
+    //     if ($groupmode) {
+    //         groups_get_activity_group($PAGE->cm, true);
+    //     }
+
+    //     $schedule = schedule_get_schedule($PAGE->cm->instance);
+
+    //     // Check if we want to include responses from inactive users.
+    //     $onlyactive = $schedule->includeinactive ? false : true;
+
+    //     // Big function, approx 6 SQL calls per user.
+    //     $allresponses = schedule_get_response_data($schedule, $PAGE->cm, $groupmode, $onlyactive);
+
+    //     $allusers = [];
+    //     foreach($allresponses as $optionid => $userlist) {
+    //         if ($optionid) {
+    //             $allusers = array_merge($allusers, array_keys($userlist));
+    //         }
+    //     }
+    //     $responsecount = count(array_unique($allusers));
+    //     $schedulenode->add(get_string("viewallresponses", "schedule", $responsecount), new moodle_url('/mod/schedule/report.php', array('id'=>$PAGE->cm->id)));
+    // }
+}
+
+
+
+
+
+
+// function schedule_extend_settings_navigation($settings, $schedulenode) {
+
+// }
+
+
+
+
+// function schedule_extend_settings_navigation($settings, $quiznode) {
+    // global $PAGE, $CFG;
+
+    // // Require {@link questionlib.php}
+    // // Included here as we only ever want to include this file if we really need to.
+    // require_once($CFG->libdir . '/questionlib.php');
+
+    // // We want to add these new nodes after the Edit settings node, and before the
+    // // Locally assigned roles node. Of course, both of those are controlled by capabilities.
+    // $keys = $quiznode->get_children_key_list();
+    // $beforekey = null;
+    // $i = array_search('modedit', $keys);
+    // if ($i === false and array_key_exists(0, $keys)) {
+    //     $beforekey = $keys[0];
+    // } else if (array_key_exists($i + 1, $keys)) {
+    //     $beforekey = $keys[$i + 1];
+    // }
+
+    // if (has_capability('mod/quiz:manageoverrides', $PAGE->cm->context)) {
+    //     $url = new moodle_url('/mod/quiz/overrides.php', array('cmid'=>$PAGE->cm->id));
+    //     $node = navigation_node::create(get_string('groupoverrides', 'quiz'),
+    //             new moodle_url($url, array('mode'=>'group')),
+    //             navigation_node::TYPE_SETTING, null, 'mod_quiz_groupoverrides');
+    //     $quiznode->add_node($node, $beforekey);
+
+    //     $node = navigation_node::create(get_string('useroverrides', 'quiz'),
+    //             new moodle_url($url, array('mode'=>'user')),
+    //             navigation_node::TYPE_SETTING, null, 'mod_quiz_useroverrides');
+    //     $quiznode->add_node($node, $beforekey);
+    // }
+
+    // if (has_capability('mod/quiz:manage', $PAGE->cm->context)) {
+    //     $node = navigation_node::create(get_string('editquiz', 'quiz'),
+    //             new moodle_url('/mod/quiz/edit.php', array('cmid'=>$PAGE->cm->id)),
+    //             navigation_node::TYPE_SETTING, null, 'mod_quiz_edit',
+    //             new pix_icon('t/edit', ''));
+    //     $quiznode->add_node($node, $beforekey);
+    // }
+
+    // if (has_capability('mod/quiz:preview', $PAGE->cm->context)) {
+    //     $url = new moodle_url('/mod/quiz/startattempt.php',
+    //             array('cmid'=>$PAGE->cm->id, 'sesskey'=>sesskey()));
+    //     $node = navigation_node::create(get_string('preview', 'quiz'), $url,
+    //             navigation_node::TYPE_SETTING, null, 'mod_quiz_preview',
+    //             new pix_icon('i/preview', ''));
+    //     $quiznode->add_node($node, $beforekey);
+    // }
+
+    // if (has_any_capability(array('mod/quiz:viewreports', 'mod/quiz:grade'), $PAGE->cm->context)) {
+    //     require_once($CFG->dirroot . '/mod/quiz/report/reportlib.php');
+    //     $reportlist = quiz_report_list($PAGE->cm->context);
+
+    //     $url = new moodle_url('/mod/quiz/report.php',
+    //             array('id' => $PAGE->cm->id, 'mode' => reset($reportlist)));
+    //     $reportnode = $quiznode->add_node(navigation_node::create(get_string('results', 'quiz'), $url,
+    //             navigation_node::TYPE_SETTING,
+    //             null, null, new pix_icon('i/report', '')), $beforekey);
+
+    //     foreach ($reportlist as $report) {
+    //         $url = new moodle_url('/mod/quiz/report.php',
+    //                 array('id' => $PAGE->cm->id, 'mode' => $report));
+    //         $reportnode->add_node(navigation_node::create(get_string($report, 'quiz_'.$report), $url,
+    //                 navigation_node::TYPE_SETTING,
+    //                 null, 'quiz_report_' . $report, new pix_icon('i/item', '')));
+    //     }
+    // }
+
+    // question_extend_settings_navigation($quiznode, $PAGE->cm->context)->trim_if_empty();
+// }
+
+
+
+
+
+
+
+
 /**
  * @global object
  * @param object $course
@@ -854,34 +1011,47 @@ function schedule_supports($feature) {
  * @param settings_navigation $settings The settings navigation object
  * @param navigation_node $schedulenode The node to add module settings to
  */
-function schedule_extend_settings_navigation(settings_navigation $settings, navigation_node $schedulenode) {
-    global $PAGE;
+// function schedule_extend_settings_navigation(settings_navigation $settings, navigation_node $schedulenode) {
+//     global $PAGE;
 
-    if (has_capability('mod/schedule:readresponses', $PAGE->cm->context)) {
 
-        $groupmode = groups_get_activity_groupmode($PAGE->cm);
-        if ($groupmode) {
-            groups_get_activity_group($PAGE->cm, true);
-        }
+//     # TODO
+//     # Check capabilities
 
-        $schedule = schedule_get_schedule($PAGE->cm->instance);
+//     // if (has_capability('mod/schedule:manage', $PAGE->cm->context)) {
+//         $node = navigation_node::create(
+//                     "edit schedules - to fix",
+//                     new moodle_url('/mod/schedule/edit.php', array('cmid'=>$PAGE->cm->id)),
+//                 navigation_node::TYPE_SETTING, null, 'mod_schedule_edit',
+//                 new pix_icon('t/edit', ''));
+//         $schedulenode->add_node($node, $beforekey);
+//     // }
 
-        // Check if we want to include responses from inactive users.
-        $onlyactive = $schedule->includeinactive ? false : true;
+//     // if (has_capability('mod/schedule:readresponses', $PAGE->cm->context)) {
 
-        // Big function, approx 6 SQL calls per user.
-        $allresponses = schedule_get_response_data($schedule, $PAGE->cm, $groupmode, $onlyactive);
+//     //     $groupmode = groups_get_activity_groupmode($PAGE->cm);
+//     //     if ($groupmode) {
+//     //         groups_get_activity_group($PAGE->cm, true);
+//     //     }
 
-        $allusers = [];
-        foreach($allresponses as $optionid => $userlist) {
-            if ($optionid) {
-                $allusers = array_merge($allusers, array_keys($userlist));
-            }
-        }
-        $responsecount = count(array_unique($allusers));
-        $schedulenode->add(get_string("viewallresponses", "schedule", $responsecount), new moodle_url('/mod/schedule/report.php', array('id'=>$PAGE->cm->id)));
-    }
-}
+//     //     $schedule = schedule_get_schedule($PAGE->cm->instance);
+
+//     //     // Check if we want to include responses from inactive users.
+//     //     $onlyactive = $schedule->includeinactive ? false : true;
+
+//     //     // Big function, approx 6 SQL calls per user.
+//     //     $allresponses = schedule_get_response_data($schedule, $PAGE->cm, $groupmode, $onlyactive);
+
+//     //     $allusers = [];
+//     //     foreach($allresponses as $optionid => $userlist) {
+//     //         if ($optionid) {
+//     //             $allusers = array_merge($allusers, array_keys($userlist));
+//     //         }
+//     //     }
+//     //     $responsecount = count(array_unique($allusers));
+//     //     $schedulenode->add(get_string("viewallresponses", "schedule", $responsecount), new moodle_url('/mod/schedule/report.php', array('id'=>$PAGE->cm->id)));
+//     // }
+// }
 
 /**
  * Obtains the automatic completion state for this schedule based on any conditions
