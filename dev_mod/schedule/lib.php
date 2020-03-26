@@ -69,7 +69,7 @@ function schedule_extend_settings_navigation(settings_navigation $settings, navi
     # Check capabilities
 
     // if (has_capability('mod/schedule:manage', $PAGE->cm->context)) {
-        $url = new moodle_url('/mod/schedule/view_edit.php', array('cmid'=>$PAGE->cm->id));
+        $url = new moodle_url('/mod/schedule/edit.php', array('cmid'=>$PAGE->cm->id));
             
         $node = navigation_node::create(
             "edit schedules - to fix",
@@ -98,13 +98,13 @@ function schedule_add_instance($schedule) {
     // error_log("---- schedule {$key} => {$value} ");
     // }
     
-    $schedule_fixed = array(
-        'course' => $schedule->course,
-        'name' => $schedule->name,
-        'intro' => 't',
-        'introformat' => 1,
-        'timemodified' => time()
-    );
+    $schedule_fixed = new stdClass;
+
+    $schedule_fixed->course = $schedule->course;
+    $schedule_fixed->name = $schedule->name;
+    $schedule_fixed->intro = '';
+    $schedule_fixed->introformat = 1;
+    $schedule_fixed->timemodified = time();
 
     $schedule_fixed->id = $DB->insert_record("schedule", $schedule_fixed);
 
