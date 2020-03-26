@@ -43,7 +43,7 @@ echo $OUTPUT->header();
 // echo $OUTPUT->heading(format_string($schedule->name), 2, null);
 
 $renderer = $PAGE->get_renderer('mod_schedule');
-echo $renderer->display_add_teacher_availability_form($cmid);
+echo $renderer->display_add_teacher_availability_form($cm->id);
 
 echo $OUTPUT->footer();
 

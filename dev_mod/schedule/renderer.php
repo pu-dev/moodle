@@ -8,9 +8,9 @@ This file creates html
 */
 class mod_schedule_renderer extends plugin_renderer_base {
 
-    public function display_add_teacher_availability_form($course_id) {
+    public function display_add_teacher_availability_form($cmid) {
         $form_params = array(
-            'course_id' => $course_id
+            'cmid' => $cmid
         );
        
         new mod_schedule_add_teacher_availability_form_logic($form_params);

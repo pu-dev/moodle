@@ -9,30 +9,36 @@ class mod_schedule_add_teacher_availability_form extends moodleform {
     */
     public function definition() {
         global $CFG, $USER;
-        $mform =& $this->_form;
 
-        // $course_id = $this->_customdata['course_id'];
-
-        $this->createDateSelector();
-        $this->createTimeSelector();
-        $this->createBottomButtons();
+        $this->add_course_id();
+        $this->create_date_selector();
+        $this->create_time_selector();
+        $this->create_bottom_buttons();
     }
 
 
+    private function add_course_id() {
+        $mform =& $this->_form;
+        $cmid = $this->_customdata['cmid'];
+        $mform->addElement('hidden', 'cmid', $cmid);
+        $mform->setType('cmid', PARAM_INT);
+
+    }
+
     /**
     */
-    private function createDateSelector () {
+    private function create_date_selector () {
         $mform =& $this->_form;
         $mform->addElement(
             'date_selector', 
-            'sessiondate', 
+            'class_date', 
             get_string('sessiondate', 'attendance'));
     }
 
 
     /**
     */
-    private function createTimeSelector () {
+    private function create_time_selector () {
         $mform =& $this->_form;
 
         for ($i = 0; $i <= 23; $i++) {
@@ -43,20 +49,20 @@ class mod_schedule_add_teacher_availability_form extends moodleform {
             $minutes[$i] = sprintf("%02d", $i);
         }
 
-        $sesendtime = array();
-        $sesendtime[] =& $mform->createElement('static', 'from', '', get_string('from', 'attendance'));
-        $sesendtime[] =& $mform->createElement('select', 'starthour', get_string('hour', 'form'), $hours, false, true);
-        $sesendtime[] =& $mform->createElement('select', 'startminute', get_string('minute', 'form'), $minutes, false, true);
-        $sesendtime[] =& $mform->createElement('static', 'to', '', get_string('to', 'attendance'));
-        $sesendtime[] =& $mform->createElement('select', 'endhour', get_string('hour', 'form'), $hours, false, true);
-        $sesendtime[] =& $mform->createElement('select', 'endminute', get_string('minute', 'form'), $minutes, false, true);
+        $class_time = array();
+        $class_time[] =& $mform->createElement('static', 'from', '', get_string('from', 'attendance'));
+        $class_time[] =& $mform->createElement('select', 'start_hour', get_string('hour', 'form'), $hours, false, true);
+        $class_time[] =& $mform->createElement('select', 'start_minute', get_string('minute', 'form'), $minutes, false, true);
+        $class_time[] =& $mform->createElement('static', 'to', '', get_string('to', 'attendance'));
+        $class_time[] =& $mform->createElement('select', 'end_hour', get_string('hour', 'form'), $hours, false, true);
+        $class_time[] =& $mform->createElement('select', 'end_minute', get_string('minute', 'form'), $minutes, false, true);
 
-        $mform->addGroup($sesendtime, 'sestime', get_string('time', 'attendance'), array(' '), true);
+        $mform->addGroup($class_time, 'class_time', get_string('time', 'attendance'), array(' '), true);
     }
 
     /**
     */
-    private function createBottomButtons() {
+    private function create_bottom_buttons() {
         $mform =& $this->_form;
 
         $buttonarray=array();
@@ -64,5 +70,4 @@ class mod_schedule_add_teacher_availability_form extends moodleform {
         $buttonarray[] =& $mform->createElement('submit', 'cancel', get_string('cancel'));
         $mform->addGroup($buttonarray, 'buttonar', '', array(' '), true);
     }
-
 }
