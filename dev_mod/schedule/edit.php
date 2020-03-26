@@ -7,6 +7,7 @@ require_once("../../config.php");
 
 // $url = new moodle_url('/mod/schedule/edit.php', array('id'=>$id));
 // $PAGE->set_url($url);
+
 $cmid = optional_param('cmid', '', PARAM_INT);
 
 $PAGE->set_title("title TODO");

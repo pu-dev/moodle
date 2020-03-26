@@ -1,25 +1,5 @@
 <?php
 
-// This file is part of Moodle - http://moodle.org/
-//
-// Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Moodle is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
-/**
- * @package   mod_schedule
- * @copyright 1999 onwards Martin Dougiamas  {@link http://moodle.com}
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -65,15 +45,12 @@ $SCHEDULE_DISPLAY = array (SCHEDULE_DISPLAY_HORIZONTAL   => get_string('displayh
 /// Standard functions /////////////////////////////////////////////////////////
 
 
+/**
+ *
+ * Function adds "edit schedules" edit menu item
+ *
+ */
 
-
-
-
-
-
-/*
-Function adds "edit schedules" edit menu item
-*/
 function schedule_extend_settings_navigation(settings_navigation $settings, navigation_node $schedulenode) {
     global $PAGE;
 
@@ -104,115 +81,58 @@ function schedule_extend_settings_navigation(settings_navigation $settings, navi
         );
 
         $schedulenode->add_node($node, $beforekey);
-    // }
-
-    // if (has_capability('mod/schedule:readresponses', $PAGE->cm->context)) {
-
-    //     $groupmode = groups_get_activity_groupmode($PAGE->cm);
-    //     if ($groupmode) {
-    //         groups_get_activity_group($PAGE->cm, true);
-    //     }
-
-    //     $schedule = schedule_get_schedule($PAGE->cm->instance);
-
-    //     // Check if we want to include responses from inactive users.
-    //     $onlyactive = $schedule->includeinactive ? false : true;
-
-    //     // Big function, approx 6 SQL calls per user.
-    //     $allresponses = schedule_get_response_data($schedule, $PAGE->cm, $groupmode, $onlyactive);
-
-    //     $allusers = [];
-    //     foreach($allresponses as $optionid => $userlist) {
-    //         if ($optionid) {
-    //             $allusers = array_merge($allusers, array_keys($userlist));
-    //         }
-    //     }
-    //     $responsecount = count(array_unique($allusers));
-    //     $schedulenode->add(get_string("viewallresponses", "schedule", $responsecount), new moodle_url('/mod/schedule/report.php', array('id'=>$PAGE->cm->id)));
-    // }
 }
 
 
+/**
+ *
+ * Add 'Schedule' activity to course.
+ *
+ */
 
+function schedule_add_instance($schedule) {
+    global $DB, $CFG;
+    require_once($CFG->dirroot.'/mod/schedule/locallib.php');
 
+    // foreach ($schedule as $key => $value) {
+    // error_log("---- schedule {$key} => {$value} ");
+    // }
+    
+    $schedule_fixed = array(
+        'course' => $schedule->course,
+        'name' => $schedule->name,
+        'intro' => 't',
+        'introformat' => 1,
+        'timemodified' => time()
+    );
 
+    $schedule_fixed->id = $DB->insert_record("schedule", $schedule_fixed);
 
-// function schedule_extend_settings_navigation($settings, $schedulenode) {
-
-// }
-
-
-
-
-// function schedule_extend_settings_navigation($settings, $quiznode) {
-    // global $PAGE, $CFG;
-
-    // // Require {@link questionlib.php}
-    // // Included here as we only ever want to include this file if we really need to.
-    // require_once($CFG->libdir . '/questionlib.php');
-
-    // // We want to add these new nodes after the Edit settings node, and before the
-    // // Locally assigned roles node. Of course, both of those are controlled by capabilities.
-    // $keys = $quiznode->get_children_key_list();
-    // $beforekey = null;
-    // $i = array_search('modedit', $keys);
-    // if ($i === false and array_key_exists(0, $keys)) {
-    //     $beforekey = $keys[0];
-    // } else if (array_key_exists($i + 1, $keys)) {
-    //     $beforekey = $keys[$i + 1];
+    // Add calendar events if necessary.
+    // schedule_set_events($schedule);
+    // if (!empty($schedule->completionexpected)) {
+    //     \core_completion\api::update_completion_date_event($schedule->coursemodule, 'schedule', $schedule->id,
+    //             $schedule->completionexpected);
     // }
 
-    // if (has_capability('mod/quiz:manageoverrides', $PAGE->cm->context)) {
-    //     $url = new moodle_url('/mod/quiz/overrides.php', array('cmid'=>$PAGE->cm->id));
-    //     $node = navigation_node::create(get_string('groupoverrides', 'quiz'),
-    //             new moodle_url($url, array('mode'=>'group')),
-    //             navigation_node::TYPE_SETTING, null, 'mod_quiz_groupoverrides');
-    //     $quiznode->add_node($node, $beforekey);
+    return $schedule_fixed->id;
+}
 
-    //     $node = navigation_node::create(get_string('useroverrides', 'quiz'),
-    //             new moodle_url($url, array('mode'=>'user')),
-    //             navigation_node::TYPE_SETTING, null, 'mod_quiz_useroverrides');
-    //     $quiznode->add_node($node, $beforekey);
-    // }
 
-    // if (has_capability('mod/quiz:manage', $PAGE->cm->context)) {
-    //     $node = navigation_node::create(get_string('editquiz', 'quiz'),
-    //             new moodle_url('/mod/quiz/edit.php', array('cmid'=>$PAGE->cm->id)),
-    //             navigation_node::TYPE_SETTING, null, 'mod_quiz_edit',
-    //             new pix_icon('t/edit', ''));
-    //     $quiznode->add_node($node, $beforekey);
-    // }
+function schedule_get_schedule($schedule_id) {
+    global $DB;
 
-    // if (has_capability('mod/quiz:preview', $PAGE->cm->context)) {
-    //     $url = new moodle_url('/mod/quiz/startattempt.php',
-    //             array('cmid'=>$PAGE->cm->id, 'sesskey'=>sesskey()));
-    //     $node = navigation_node::create(get_string('preview', 'quiz'), $url,
-    //             navigation_node::TYPE_SETTING, null, 'mod_quiz_preview',
-    //             new pix_icon('i/preview', ''));
-    //     $quiznode->add_node($node, $beforekey);
-    // }
+    if ($schedule = $DB->get_record("schedule", array("id" => $schedule_id))) {
+        // if ($options = $DB->get_records("schedule_options", array("scheduleid" => $scheduleid), "id")) {
+        //     foreach ($options as $option) {
+        //         $schedule->option[$option->id] = $option->text;
+        //         $schedule->maxanswers[$option->id] = $option->maxanswers;
+        //     }
+        return $schedule;
+    }
+    return false;
+}
 
-    // if (has_any_capability(array('mod/quiz:viewreports', 'mod/quiz:grade'), $PAGE->cm->context)) {
-    //     require_once($CFG->dirroot . '/mod/quiz/report/reportlib.php');
-    //     $reportlist = quiz_report_list($PAGE->cm->context);
-
-    //     $url = new moodle_url('/mod/quiz/report.php',
-    //             array('id' => $PAGE->cm->id, 'mode' => reset($reportlist)));
-    //     $reportnode = $quiznode->add_node(navigation_node::create(get_string('results', 'quiz'), $url,
-    //             navigation_node::TYPE_SETTING,
-    //             null, null, new pix_icon('i/report', '')), $beforekey);
-
-    //     foreach ($reportlist as $report) {
-    //         $url = new moodle_url('/mod/quiz/report.php',
-    //                 array('id' => $PAGE->cm->id, 'mode' => $report));
-    //         $reportnode->add_node(navigation_node::create(get_string($report, 'quiz_'.$report), $url,
-    //                 navigation_node::TYPE_SETTING,
-    //                 null, 'quiz_report_' . $report, new pix_icon('i/item', '')));
-    //     }
-    // }
-
-    // question_extend_settings_navigation($quiznode, $PAGE->cm->context)->trim_if_empty();
-// }
 
 
 
@@ -273,37 +193,7 @@ function schedule_user_complete($course, $user, $mod, $schedule) {
  * @param object $schedule
  * @return int
  */
-function schedule_add_instance($schedule) {
-    global $DB, $CFG;
-    require_once($CFG->dirroot.'/mod/schedule/locallib.php');
 
-    $schedule->timemodified = time();
-
-    //insert answers
-    $schedule->id = $DB->insert_record("schedule", $schedule);
-    foreach ($schedule->option as $key => $value) {
-        $value = trim($value);
-        if (isset($value) && $value <> '') {
-            $option = new stdClass();
-            $option->text = $value;
-            $option->scheduleid = $schedule->id;
-            if (isset($schedule->limit[$key])) {
-                $option->maxanswers = $schedule->limit[$key];
-            }
-            $option->timemodified = time();
-            $DB->insert_record("schedule_options", $option);
-        }
-    }
-
-    // Add calendar events if necessary.
-    schedule_set_events($schedule);
-    if (!empty($schedule->completionexpected)) {
-        \core_completion\api::update_completion_date_event($schedule->coursemodule, 'schedule', $schedule->id,
-                $schedule->completionexpected);
-    }
-
-    return $schedule->id;
-}
 
 /**
  * Given an object containing all the necessary data,
@@ -819,27 +709,6 @@ function schedule_get_option_text($schedule, $id) {
     }
 }
 
-/**
- * Gets a full schedule record
- *
- * @global object
- * @param int $scheduleid
- * @return object|bool The schedule or false
- */
-function schedule_get_schedule($scheduleid) {
-    global $DB;
-
-    if ($schedule = $DB->get_record("schedule", array("id" => $scheduleid))) {
-        if ($options = $DB->get_records("schedule_options", array("scheduleid" => $scheduleid), "id")) {
-            foreach ($options as $option) {
-                $schedule->option[$option->id] = $option->text;
-                $schedule->maxanswers[$option->id] = $option->maxanswers;
-            }
-            return $schedule;
-        }
-    }
-    return false;
-}
 
 /**
  * List the actions that correspond to a view of this module.
@@ -1504,7 +1373,7 @@ function schedule_get_coursemodule_info($coursemodule) {
     global $DB;
 
     $dbparams = ['id' => $coursemodule->instance];
-    $fields = 'id, name, intro, introformat, completionsubmit, timeopen, timeclose';
+    $fields = 'id, name, intro, introformat';
     if (!$schedule = $DB->get_record('schedule', $dbparams, $fields)) {
         return false;
     }
@@ -1518,16 +1387,16 @@ function schedule_get_coursemodule_info($coursemodule) {
     }
 
     // Populate the custom completion rules as key => value pairs, but only if the completion mode is 'automatic'.
-    if ($coursemodule->completion == COMPLETION_TRACKING_AUTOMATIC) {
-        $result->customdata['customcompletionrules']['completionsubmit'] = $schedule->completionsubmit;
-    }
-    // Populate some other values that can be used in calendar or on dashboard.
-    if ($schedule->timeopen) {
-        $result->customdata['timeopen'] = $schedule->timeopen;
-    }
-    if ($schedule->timeclose) {
-        $result->customdata['timeclose'] = $schedule->timeclose;
-    }
+    // if ($coursemodule->completion == COMPLETION_TRACKING_AUTOMATIC) {
+    //     $result->customdata['customcompletionrules']['completionsubmit'] = $schedule->completionsubmit;
+    // }
+    // // Populate some other values that can be used in calendar or on dashboard.
+    // if ($schedule->timeopen) {
+    //     $result->customdata['timeopen'] = $schedule->timeopen;
+    // }
+    // if ($schedule->timeclose) {
+    //     $result->customdata['timeclose'] = $schedule->timeclose;
+    // }
 
     return $result;
 }
