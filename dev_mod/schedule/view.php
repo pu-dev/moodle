@@ -20,12 +20,12 @@ if (! $course = $DB->get_record("course", array("id" => $cm->course))) {
 require_login($course, true, $cm);
 // require_course_login($course, false, $cm);
 
-$page_url = new moodle_url('/mod/schedule/view.php', array('id' => $cm->id));
-
-
 if (!$schedule = schedule_get_schedule($cm->instance)) {
     print_error('invalidcoursemodule');
 }
+
+$page_url = new moodle_url('/mod/schedule/view.php', array('id' => $cm->id));
+
 
 $PAGE->set_url($page_url);
 $PAGE->set_title($schedule->name);

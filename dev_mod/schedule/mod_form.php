@@ -8,7 +8,7 @@ require_once ($CFG->dirroot.'/course/moodleform_mod.php');
 
 /**
  *
- * Form which displays when adding plugin to a course
+ * Form which is display when adding activity plugin to a course
  *
  */
 class mod_schedule_mod_form extends moodleform_mod {
@@ -22,6 +22,8 @@ class mod_schedule_mod_form extends moodleform_mod {
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
         $mform->addElement('text', 'name', get_string('schedulename', 'schedule'), array('size'=>'64'));
+        $mform->setDefault('name', 'schedule');
+        
         if (!empty($CFG->formatstringstriptags)) {
             $mform->setType('name', PARAM_TEXT);
         } else {
