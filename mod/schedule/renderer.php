@@ -12,7 +12,7 @@ class mod_schedule_renderer extends plugin_renderer_base {
         $form_params = array(
             'course_id' => $course_id
         );
-        
+       
         new mod_schedule_add_teacher_availability_form_logic($form_params);
     }
 }

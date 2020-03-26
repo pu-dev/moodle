@@ -65,31 +65,29 @@ $PAGE->navbar->add($att->name);
 $currenttab = attendance_tabs::TAB_ADD;
 $formparams = array('course' => $course, 'cm' => $cm, 'modcontext' => $context, 'att' => $att);
 switch ($att->pageparams->action) {
-
     case mod_attendance_sessions_page_params::ACTION_ADD:
         $url = $att->url_sessions(array('action' => mod_attendance_sessions_page_params::ACTION_ADD));
         $mform = new mod_attendance_add_form($url, $formparams);
 
-        // if ($mform->is_cancelled()) {
-        //     redirect($att->url_manage());
-        // }
+        if ($mform->is_cancelled()) {
+            redirect($att->url_manage());
+        }
 
-        // if ($formdata = $mform->get_data()) {
-        //     $sessions = attendance_construct_sessions_data_for_add($formdata, $att);
-        //     $att->add_sessions($sessions);
-        //     if (count($sessions) == 1) {
-        //         $message = get_string('sessiongenerated', 'attendance');
-        //     } else {
-        //         $message = get_string('sessionsgenerated', 'attendance', count($sessions));
-        //     }
+        if ($formdata = $mform->get_data()) {
+            $sessions = attendance_construct_sessions_data_for_add($formdata, $att);
+            $att->add_sessions($sessions);
+            if (count($sessions) == 1) {
+                $message = get_string('sessiongenerated', 'attendance');
+            } else {
+                $message = get_string('sessionsgenerated', 'attendance', count($sessions));
+            }
 
-        //     mod_attendance_notifyqueue::notify_success($message);
-        //     // Redirect to the sessions tab always showing all sessions.
-        //     $SESSION->attcurrentattview[$cm->course] = ATT_VIEW_ALL;
-        //     redirect($att->url_manage());
-        // }
+            mod_attendance_notifyqueue::notify_success($message);
+            // Redirect to the sessions tab always showing all sessions.
+            $SESSION->attcurrentattview[$cm->course] = ATT_VIEW_ALL;
+            redirect($att->url_manage());
+        }
         break;
-        
     case mod_attendance_sessions_page_params::ACTION_UPDATE:
         $sessionid = required_param('sessionid', PARAM_INT);
 

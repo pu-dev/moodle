@@ -92,7 +92,7 @@ function schedule_extend_settings_navigation(settings_navigation $settings, navi
     # Check capabilities
 
     // if (has_capability('mod/schedule:manage', $PAGE->cm->context)) {
-        $url = new moodle_url('/mod/schedule/edit.php', array('cmid'=>$PAGE->cm->id));
+        $url = new moodle_url('/mod/schedule/view_edit.php', array('cmid'=>$PAGE->cm->id));
             
         $node = navigation_node::create(
             "edit schedules - to fix",

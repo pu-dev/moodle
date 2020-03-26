@@ -56,7 +56,7 @@ class mod_schedule_add_teacher_availability_form extends moodleform {
 
     /**
     */
-    private function createBottomButtons () {
+    private function createBottomButtons() {
         $mform =& $this->_form;
 
         $buttonarray=array();
@@ -64,4 +64,5 @@ class mod_schedule_add_teacher_availability_form extends moodleform {
         $buttonarray[] =& $mform->createElement('submit', 'cancel', get_string('cancel'));
         $mform->addGroup($buttonarray, 'buttonar', '', array(' '), true);
     }
+
 }
