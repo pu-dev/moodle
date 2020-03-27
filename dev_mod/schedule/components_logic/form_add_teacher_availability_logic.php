@@ -1,7 +1,6 @@
 <?php
 defined('MOODLE_INTERNAL') || die();
 
-require_once('./debug.php');
 require_once('./components/form_add_teacher_availability.php');
 
 
@@ -33,6 +32,7 @@ class mod_schedule_add_teacher_availability_form_logic {
         global $DB, $USER;
 
         define("MINUTES_IN_HOUR", 60);
+        define("SECONDS_IN_MINUTE", 60);
 
         $form_data = $this->_mform->get_data();
 
@@ -51,25 +51,19 @@ class mod_schedule_add_teacher_availability_form_logic {
         );
 
         // Get date
-        $cls_date = $form_data->class_date;
-        
-        $day = $cls_date['day'];
-        $month = $cls_date['month'];
-        $year = $cls_date['year'];
+        $epoch_date = $form_data->class_date;
+        $epoch_date += (
+            $start_hour * MINUTES_IN_HOUR * SECONDS_IN_MINUTE +
+            $start_minute * SECONDS_IN_MINUTE
+        );
 
-        error_log('day'. $day);
-        error_log('month '.$month);
-        error_log('year '.$year);
-
-        // date_default_timezone_set('UTC');  // optional
-        $epoch_date = mktime($start_hour, $start_minute, 0, $month, $day, $year);
-
+        // Create 'class' representation
         $class = new stdClass;
-        $class->schedule_id=1;
-        $class->teacher_id=1;
-        $class->student_id=1;
-        $class->lesson_date=$epoch_date;
-        $class->lesson_duration=$duration;
+        $class->schedule_id = 1; # TODO
+        $class->teacher_id = $USER->id;
+        $class->student_id = null;
+        $class->lesson_date = $epoch_date;
+        $class->lesson_duration = $duration;
 
         $class->id = $DB->insert_record('schedule_lesson', $class);
 
