@@ -1,13 +1,13 @@
 <?php
 defined('MOODLE_INTERNAL') || die();
 
-require_once('./components/form_add_teacher_availability.php');
+require_once(dirname(__FILE__).'/../components/form_add_teacher_availability.php');
 
 
 class mod_schedule_add_teacher_availability_form_logic {
 
     public function __construct($form_params) {
-        log_debug("Constructor: add_teacher_availability_form_logic");
+        // log_debug("Constructor: add_teacher_availability_form_logic");
 
         $this->_cmid = $form_params['cmid'];
         $this->_mform = new mod_schedule_add_teacher_availability_form(null, $form_params);
@@ -73,13 +73,13 @@ class mod_schedule_add_teacher_availability_form_logic {
 
 
     private function cancel_form() {
-        log_debug("cancel form");
+        // log_debug("cancel form");
     }
 
 
     private function validate_form() {
         // Check if to time is after from time
-        log_debug("validate_form");
+        // log_debug("validate_form");
         $this->_mform->display();
         // $this->_mform->test(3);
     }

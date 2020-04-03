@@ -1,7 +1,9 @@
 <?php
-require_once('./debug.php');
-require_once('./components_logic/form_add_teacher_availability_logic.php');
-require_once('./components/class_list.php');
+// require_once('./debug.php');
+
+require_once($CFG->dirroot.'/mod/schedule/components_logic/form_add_teacher_availability_logic.php');
+require_once($CFG->dirroot.'/mod/schedule/components/class_list.php');
+require_once($CFG->dirroot.'/mod/schedule/components/student_class_tabs.php');
 
 
 /*
@@ -24,54 +26,19 @@ class mod_schedule_renderer extends plugin_renderer_base {
      */
 
     public function render_mod_schedule_class_list(mod_schedule_class_list $class_list) {
-        global $DB;
+        return html_writer::table($class_list->class_table);
+    }
 
-        $classes = $DB->get_records('schedule_lesson');
 
-        $table = new html_table();
-
-        $table->width = '100%';
-        $table->head = array(
-            'Teacher',
-            'Student',
-            'Date',
-            'Time',
-            'Duration'
+    public function render_mod_schedule_student_class_tabs(mod_schedule_student_class_tabs $view) {
+        return print_tabs(
+            $view->get_tabs(),
+            $view->current_tab, 
+            null, 
+            null
         );
 
-        foreach ($classes as $id => $class) {
-            
-            $student_name = 'todo';
-            // $student_name = get_string('no_student', 'schedule');
-            if ($class->student_id != 0) {
-                // $student_name = 'name TODO';
-            }
-
-            $teacher_name = $class->teacher_id;
-
-
-            $table->data[$id][] = $teacher_name;
-            $table->data[$id][] = $student_name;
-
-            # TODO
-            # get_string('date_format', '<nobr>%a %d %b %Y</nobr>'); 
-            $table->data[$id][] = userdate($class->lesson_date, '<nobr>%a %d %b %Y</nobr>');
-
-
-            // Get time
-            //
-            $table->data[$id][] = html_writer::tag(
-                'nobr', 
-                strftime('%H:%M', $class->lesson_date));
-
-            // Get duration
-            //
-            $table->data[$id][] = html_writer::tag(
-                'nobr', 
-                gmdate('H:i', $class->lesson_duration)
-            );
-        }
-
-        return html_writer::table($table);
     }
 }
+
+

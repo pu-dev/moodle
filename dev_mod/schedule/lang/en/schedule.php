@@ -23,7 +23,14 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['addmoreschedules'] = 'Add more schedules';
+$string['book_class'] = 'Book class';
+$string['view_class'] = 'View class';
+
+
+$string['no_student'] = 'none';
+
+
+$string['addmoreschedules'] = 'Add more schedules1';
 $string['allowupdate'] = 'Allow schedule to be updated';
 $string['allowmultiple'] = 'Allow more than one schedule to be selected';
 $string['answered'] = 'Answered';

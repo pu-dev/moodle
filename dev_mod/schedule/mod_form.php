@@ -8,7 +8,8 @@ require_once ($CFG->dirroot.'/course/moodleform_mod.php');
 
 /**
  *
- * Form which is display when adding activity plugin to a course
+ * Form which is display when adding plugin to a course,
+ * or when editing plugin settings.
  *
  */
 class mod_schedule_mod_form extends moodleform_mod {
@@ -41,19 +42,19 @@ class mod_schedule_mod_form extends moodleform_mod {
 
     function data_preprocessing(&$default_values){
         global $DB;
-        if (!empty($this->_instance) && ($options = $DB->get_records_menu('schedule_options',array('scheduleid'=>$this->_instance), 'id', 'id,text'))
-               && ($options2 = $DB->get_records_menu('schedule_options', array('scheduleid'=>$this->_instance), 'id', 'id,maxanswers')) ) {
-            $scheduleids=array_keys($options);
-            $options=array_values($options);
-            $options2=array_values($options2);
+        // if (!empty($this->_instance) && ($options = $DB->get_records_menu('schedule_options',array('scheduleid'=>$this->_instance), 'id', 'id,text'))
+        //        && ($options2 = $DB->get_records_menu('schedule_options', array('scheduleid'=>$this->_instance), 'id', 'id,maxanswers')) ) {
+        //     $scheduleids=array_keys($options);
+        //     $options=array_values($options);
+        //     $options2=array_values($options2);
 
-            foreach (array_keys($options) as $key){
-                $default_values['option['.$key.']'] = $options[$key];
-                $default_values['limit['.$key.']'] = $options2[$key];
-                $default_values['optionid['.$key.']'] = $scheduleids[$key];
-            }
+        //     foreach (array_keys($options) as $key){
+        //         $default_values['option['.$key.']'] = $options[$key];
+        //         $default_values['limit['.$key.']'] = $options2[$key];
+        //         $default_values['optionid['.$key.']'] = $scheduleids[$key];
+        //     }
 
-        }
+        // }
 
     }
 

@@ -1,5 +1,6 @@
 <?php
-require_once('./debug.php');
+// require_once('./debug.php');
+// print_r($CFG);
 require_once($CFG->libdir.'/formslib.php');
 
 
