@@ -46,7 +46,10 @@ class mod_attendance_renderer extends plugin_renderer_base {
      * @return string html code
      */
     protected function render_attendance_tabs(attendance_tabs $atttabs) {
-        return print_tabs($atttabs->get_tabs(), $atttabs->currenttab, null, null, true);
+        return print_tabs(
+            $atttabs->get_tabs(), 
+            $atttabs->currenttab, 
+            null, null, true);
     }
 
     /**

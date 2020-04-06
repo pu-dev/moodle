@@ -10,5 +10,10 @@ class view_student_book_lesson_impl extends view_student_base_impl {
         );
     }
 
+    protected function display() {
+        parent::display();
+        echo "book lesson";
+    }
+
 }
 

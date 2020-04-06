@@ -8,6 +8,11 @@ class view_student_view_lesson_impl extends view_student_base_impl {
         parent::__construct(
             mod_schedule_student_class_tabs::TAB_VIEW_LESSON
         );
+
     }
 
+    protected function display() {
+        parent::display();
+        echo "view lesson";
+    }
 }

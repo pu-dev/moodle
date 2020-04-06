@@ -26,6 +26,9 @@
 $string['book_class'] = 'Book class';
 $string['view_class'] = 'View class';
 
+$string['teacher_availability'] = 'Your availability';
+$string['teacher_booked_class'] = 'Booked classes';
+
 
 $string['no_student'] = 'none';
 

@@ -4,6 +4,7 @@
 require_once($CFG->dirroot.'/mod/schedule/components_logic/form_add_teacher_availability_logic.php');
 require_once($CFG->dirroot.'/mod/schedule/components/class_list.php');
 require_once($CFG->dirroot.'/mod/schedule/components/student_class_tabs.php');
+require_once($CFG->dirroot.'/mod/schedule/components/teacher_class_tabs.php');
 
 
 /*
@@ -37,8 +38,18 @@ class mod_schedule_renderer extends plugin_renderer_base {
             null, 
             null
         );
-
     }
+
+
+    public function render_mod_schedule_teacher_class_tabs(mod_schedule_teacher_class_tabs $view) {
+        return print_tabs(
+            $view->get_tabs(),
+            $view->current_tab, 
+            null, 
+            null
+        );
+    }
+
 }
 
 

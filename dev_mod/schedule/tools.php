@@ -25,4 +25,49 @@ class mod_schedule_tools {
 
         return $CFG->wwwroot."/mod/schedule";
     }
+
+    public static function get_cmid() {
+        return required_param('id', PARAM_INT);
+
+    }
+
+
+    public static function is_student($cmid = null) {
+        if (is_null($cmid)) {
+            $cmid = self::get_cmid();
+        }
+
+        $context = context_module::instance($cmid);
+        return has_capability('mod/schedule:student', $context);
+    }
+
+
+    public static function is_teacher($cmid = null) {
+        if (is_null($cmid)) {
+            $cmid = self::get_cmid();
+        }
+
+        $context = context_module::instance($cmid);
+        return has_capability('mod/schedule:teacher', $context);
+    }
+
+
+    public static function is_editingteacher($cmid = null) {
+        if (is_null($cmid)) {
+            $cmid = self::get_cmid();
+        }
+
+        $context = context_module::instance($cmid);
+        return has_capability('mod/schedule:editingteacher', $context);
+    }
+
+
+    public static function is_manager($cmid = null) {
+        if (is_null($cmid)) {
+            $cmid = self::get_cmid();
+        }
+        $context = context_module::instance($cmid);
+        return has_capability('mod/schedule:manager', $context);
+    }
+
 }

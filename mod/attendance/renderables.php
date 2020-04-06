@@ -85,7 +85,8 @@ class attendance_tabs implements renderable {
             'mod/attendance:changeattendances'
         );
         if (has_any_capability($capabilities, $context)) {
-            $toprow[] = new tabobject(self::TAB_SESSIONS, $this->att->url_manage()->out(),
+            $toprow[] = new tabobject(self::TAB_SESSIONS, 
+                $this->att->url_manage()->out(),
                             get_string('sessions', 'attendance'));
         }
 
