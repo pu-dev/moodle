@@ -1,17 +1,21 @@
 <?php
 require_once(dirname(__FILE__).'/../../config.php');
+require_once($CFG->dirroot.'/mod/schedule/debug.php');
 
 
 class mod_schedule_tools {
  
-    public static function get_self_url() {
+    public static function get_self_url($url_params=null) {
         $src_url = $_SERVER['PHP_SELF'];
+
+        debug("PHP Self: {$src_url}");
 
         if ( preg_match('/\/mod\/schedule\/.*\.php/', $src_url, $match) == 0 ) {
             die("Problem with retrieving self url.");
         }
 
-        return $match[0];
+        $url = new moodle_url($match[0], $url_params);
+        return $url;
     }
 
 

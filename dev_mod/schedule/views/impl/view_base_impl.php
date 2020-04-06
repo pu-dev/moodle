@@ -1,6 +1,7 @@
 <?php
 require_once(dirname(__FILE__).'/../../../../config.php');
-// require_once($CFG->dirroot.'/mod/schedule/components/student_class_tabs.php');
+require_once($CFG->dirroot.'/mod/schedule/debug.php');
+
 
 
 abstract class view_base_impl {
@@ -31,13 +32,11 @@ abstract class view_base_impl {
             print_error('invalidcoursemodule');
         }
 
-        $my_url = mod_schedule_tools::get_self_url();
-        $page_url = new moodle_url(
-            $my_url,
-            array('id' => $cm->id));
+        $url_params = array('id' => $cm->id);
+        $url_self = mod_schedule_tools::get_self_url($url_params);
+        debug("Set self url for the page: $url_self");
 
-
-        $PAGE->set_url($page_url);
+        $PAGE->set_url($url_self);
         $PAGE->set_title($schedule->name);
         $PAGE->set_heading($course->fullname);
 

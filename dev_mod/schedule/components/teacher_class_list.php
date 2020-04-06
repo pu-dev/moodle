@@ -1,6 +1,9 @@
 <?php
 
-class mod_schedule_class_list implements renderable {
+class mod_schedule_teacher_class_list implements renderable {
+
+    private $class_table;
+
     public function __construct() {
         global $DB;
 
@@ -28,7 +31,7 @@ class mod_schedule_class_list implements renderable {
                 ON lesson.student_id=student_user.id
 
             ORDER BY 
-                lesson.lesson_date DESC
+                lesson.lesson_date ASC
         ";
 
         $classes = $DB->get_records_sql($sql);
@@ -77,5 +80,9 @@ class mod_schedule_class_list implements renderable {
         }
 
         $this->class_table = $table;
+    }
+
+    public function get_class_table() {
+        return $this->class_table;
     }
 }

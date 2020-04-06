@@ -1,13 +1,11 @@
 <?php
 require_once(dirname(__FILE__).'/../../../config.php');
-require_once($CFG->dirroot.'/mod/schedule/tools.php');
 require_once($CFG->dirroot.'/mod/schedule/components/tabs_base.php');
 
 
 class mod_schedule_student_class_tabs extends mod_schedule_tabs_base implements renderable {
-    const TAB_BOOK_LESSON = 1;
-    const TAB_VIEW_LESSON = 2;
-
+    public const TAB_BOOK_LESSON = 1;
+    public const TAB_VIEW_LESSON = 2;
 
     public function __construct($cmid, $current_tab) {
         parent::__construct($cmid, $current_tab);
