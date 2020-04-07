@@ -3,6 +3,7 @@ require_once(dirname(__FILE__).'/../../../config.php');
 require_once($CFG->dirroot.'/mod/schedule/debug.php');
 require_once($CFG->dirroot.'/mod/schedule/actions/action_base.php');
 
+
 class action_student_book_class extends action_base {
     private $student_id;
     private $class_id;
@@ -46,7 +47,11 @@ class action_student_book_class extends action_base {
         );
 
         // Return true if class has been booked
-        return is_object($class);
+        return new action_result(
+            is_object($class),
+            $class
+        );
+        
     }
 }
 

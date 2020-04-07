@@ -2,6 +2,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once(dirname(__FILE__).'/../../../config.php');
+require_once($CFG->dirroot.'/mod/schedule/tools.php');
 require_once($CFG->dirroot.'/mod/schedule/debug.php');
 
 
@@ -58,6 +59,7 @@ abstract class mod_schedule_class_list_base implements renderable {
         );
     }
 
+
     final protected function get_cell_duration($class) {
         return html_writer::tag(
             'nobr', 
@@ -65,9 +67,11 @@ abstract class mod_schedule_class_list_base implements renderable {
         );
     }
 
+
     final protected function get_cell_date($class) {
-         return userdate($class->lesson_date, '<nobr>%a %d %b %Y</nobr>');
+         return mod_schedule_tools::epoch_to_date($class->lesson_date);
     }
+
 
     final protected function get_cell_action($class, $action, $label) {
         $url_params = array('id' => $this->cm->id);

@@ -46,6 +46,16 @@ abstract class view_base_impl {
         echo $OUTPUT->footer();       
     }
 
+    protected function alert_success($msg) {
+        global $OUTPUT;
+        echo $OUTPUT->notification($msg, "success");
+    }
+    
+    protected function alert_error($msg) {
+        global $OUTPUT;
+        echo $OUTPUT->notification($msg, "error");
+    }
+
     abstract protected function display();
 }
 

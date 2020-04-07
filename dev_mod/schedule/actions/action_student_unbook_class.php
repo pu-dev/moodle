@@ -44,7 +44,10 @@ class action_student_unbook_class extends action_base {
         );
 
         // Return true if class has been booked
-        return is_object($class);
+        return new action_result(
+            is_object($class),
+            $class
+        );
     }
 }
 

@@ -24,6 +24,9 @@ class mod_schedule_teacher_class_list extends mod_schedule_class_list_base {
 
         $sql = $this->get_sql_query_base();
         $sql .= "
+            WHERE
+                teacher_id = {$USER->id}
+                
             ORDER BY 
                 lesson.lesson_date ASC
         ";

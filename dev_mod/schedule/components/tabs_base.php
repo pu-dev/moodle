@@ -15,12 +15,10 @@ abstract class mod_schedule_tabs_base implements renderable {
     }
 
     final protected function create_tab($tab_id, $url_view, $label) {
-        debug($url_view);
         $url = mod_schedule_tools::get_module_url(
             $url_view,
             array('id' => $this->cmid)
         );
-        // $url = mod_schedule_tools::get_self_url();
 
         return new tabobject(
             $tab_id,

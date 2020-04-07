@@ -70,13 +70,15 @@ class view_teacher_availability_impl extends view_teacher_base_impl {
     private function action_class_cancel() {
         $class_id = required_param('class_id', PARAM_INT);
         $action = new action_teacher_cancel_class($class_id);
-        $canceled = $action->execute();
+        $result = $action->execute();
 
-        if ($canceled) {
-            echo "class unbooked";
+        if ($result->ok) {
+            $msg = get_string('class_canceled_ok', 'schedule');
+            $this->alert_success($msg);
         }
         else {
-            echo "failed to unbook";
+            $msg = get_string('class_canceled_failed', 'schedule');
+            $this->alert_success($msg);
         }        
     }
 }

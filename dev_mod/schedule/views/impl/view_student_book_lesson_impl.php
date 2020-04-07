@@ -1,6 +1,7 @@
 <?php
 require_once(dirname(__FILE__).'/../../../../config.php');
 require_once($CFG->dirroot.'/mod/schedule/debug.php');
+require_once($CFG->dirroot.'/mod/schedule/tools.php');
 require_once($CFG->dirroot.'/mod/schedule/views/impl/view_student_base_impl.php');
 require_once($CFG->dirroot.'/mod/schedule/components/student_book_class_list.php');
 require_once($CFG->dirroot.'/mod/schedule/actions/action_student_book_class.php');
@@ -53,16 +54,20 @@ class view_student_book_lesson_impl extends view_student_base_impl {
 
     private function action_book_class() {
         global $USER;
+        global $OUTPUT;
 
         $class_id = required_param('class_id', PARAM_INT);
         $action = new action_student_book_class($class_id, $USER->id);
-        $booked = $action->execute();
+        $result = $action->execute();
+        $class_date = mod_schedule_tools::epoch_to_date($result->data->lesson_date);
 
-        if ($booked) {
-            echo "class booked";
+        if ($result->ok) {
+            $msg = get_string('class_booked_ok', 'schedule', $class_date);
+            $this->alert_success($msg);
         }
         else {
-            echo "failed to book";
+            $msg = get_string('class_booked_failed', 'schedule', $class_date);
+            $this->alert_error($msg);
         }
     }
 
@@ -71,13 +76,16 @@ class view_student_book_lesson_impl extends view_student_base_impl {
 
         $class_id = required_param('class_id', PARAM_INT);
         $action = new action_student_unbook_class($class_id, $USER->id);
-        $unbooked = $action->execute();
+        $result = $action->execute();
+        $class_date = mod_schedule_tools::epoch_to_date($result->data->lesson_date);
 
-        if ($unbooked) {
-            echo "class unbooked";
+        if ($result->ok) {
+            $msg = get_string('class_ubbooked_ok', 'schedule', $class_date);
+            $this->alert_success($msg);
         }
         else {
-            echo "failed to unbook";
+            $msg = get_string('class_unbooked_failed', 'schedule');
+            $this->alert_success($msg);
         }
     }
 }

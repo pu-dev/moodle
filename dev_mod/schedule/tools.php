@@ -69,4 +69,8 @@ class mod_schedule_tools {
         return has_capability('mod/schedule:manager', $context);
     }
 
+
+    public static function epoch_to_date($seconds) {
+        return userdate($seconds, '<nobr>%a %d %b %Y</nobr>');
+    }
 }

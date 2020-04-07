@@ -37,8 +37,11 @@ class action_teacher_cancel_class extends action_base {
         );
 
         // Return true if class has been removed from DB
-        return ! is_object($class);
+
+        return new action_result (
+            ! is_object($class),
+            $class
+        );
     }
 }
-
 
