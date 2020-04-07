@@ -55,7 +55,7 @@ class view_student_book_lesson_impl extends view_student_base_impl {
         global $USER;
 
         $class_id = required_param('class_id', PARAM_INT);
-        $action = new action_student_book_class($USER->id, $class_id);
+        $action = new action_student_book_class($class_id, $USER->id);
         $booked = $action->execute();
 
         if ($booked) {
@@ -70,10 +70,10 @@ class view_student_book_lesson_impl extends view_student_base_impl {
         global $USER;
 
         $class_id = required_param('class_id', PARAM_INT);
-        $action = new action_student_unbook_class($USER->id, $class_id);
-        $booked = $action->execute();
+        $action = new action_student_unbook_class($class_id, $USER->id);
+        $unbooked = $action->execute();
 
-        if ($booked) {
+        if ($unbooked) {
             echo "class unbooked";
         }
         else {

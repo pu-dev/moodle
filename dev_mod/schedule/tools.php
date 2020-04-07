@@ -8,8 +8,6 @@ class mod_schedule_tools {
     public static function get_self_url($url_params=null) {
         $src_url = $_SERVER['PHP_SELF'];
 
-        debug("PHP Self: {$src_url}");
-
         if ( preg_match('/\/mod\/schedule\/.*\.php/', $src_url, $match) == 0 ) {
             die("Problem with retrieving self url.");
         }

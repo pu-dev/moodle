@@ -8,15 +8,15 @@ class action_student_book_class extends action_base {
     private $class_id;
 
 
-    public function __construct($student_id, $class_id) {
+    public function __construct($class_id, $student_id) {
         debug(
             'action_student_book_class: '.
             "student_id: {$student_id}, ".
             "class_id: {$class_id}"
         );
 
-        $this->student_id = $student_id;
         $this->class_id = $class_id;
+        $this->student_id = $student_id;
     }
 
 

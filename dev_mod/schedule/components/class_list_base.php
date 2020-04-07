@@ -68,7 +68,50 @@ abstract class mod_schedule_class_list_base implements renderable {
     final protected function get_cell_date($class) {
          return userdate($class->lesson_date, '<nobr>%a %d %b %Y</nobr>');
     }
-    
+
+    final protected function get_cell_action($class, $action, $label) {
+        $url_params = array('id' => $this->cm->id);
+        $url_action = mod_schedule_tools::get_self_url($url_params);
+
+        $html = html_writer::start_tag(
+            'form', 
+            array(
+                'action' => $url_action,
+                'method' => 'post'
+            )
+        );
+
+        $html .= html_writer::tag(
+            'button', 
+            $label,
+            array(
+                'type'  => 'submit', 
+                'name' => 'action'
+            )
+        );
+
+        $html .= html_writer::empty_tag(
+            'input', 
+            array(
+                'type' => 'hidden',
+                'name' => 'action',
+                'value' => $action
+            )
+        );
+
+        $html .= html_writer::empty_tag(
+            'input', 
+            array(
+                'type' => 'hidden',
+                'name' => 'class_id',
+                'value' => $class->lesson_id
+            )
+        );
+
+        $html .= html_writer::end_tag('form');
+        return $html;
+    }
+
     abstract protected function create_table($records);
 
     abstract protected function get_sql_query();

@@ -23,6 +23,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+$string['cancel_class'] = 'Cancel class';
 $string['book_class'] = 'Book class';
 $string['unbook_class'] = 'Unbook class';
 

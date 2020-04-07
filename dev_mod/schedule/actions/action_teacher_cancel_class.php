@@ -3,20 +3,17 @@ require_once(dirname(__FILE__).'/../../../config.php');
 require_once($CFG->dirroot.'/mod/schedule/debug.php');
 require_once($CFG->dirroot.'/mod/schedule/actions/action_base.php');
 
-class action_student_unbook_class extends action_base {
-    private $student_id;
+class action_teacher_cancel_class extends action_base {
     private $class_id;
 
 
-    public function __construct($class_id, $student_id) {
+    public function __construct($class_id) {
         debug(
-            'action_student_unbook_class: '.
-            "student_id: {$student_id}, ".
+            'action_teacher_cancel_class: '.
             "class_id: {$class_id}"
         );
 
         $this->class_id = $class_id;
-        $this->student_id = $student_id;
     }
 
 
@@ -24,14 +21,11 @@ class action_student_unbook_class extends action_base {
         global $DB;
         $table_name = 'schedule_lesson';
 
-        // Update record in DB
-        $DB->set_field(
-            'schedule_lesson',
-            'student_id',
-            null,
+        // Delete class from DB
+        $DB->delete_records(
+            $table_name,
             array(
-                'id' => $this->class_id,
-                'student_id' => $this->student_id
+                'id'=>$this->class_id
             )
         );
 
@@ -39,12 +33,11 @@ class action_student_unbook_class extends action_base {
             $table_name, 
             array(
                 'id' => $this->class_id,
-                'student_id' => null
             )
         );
 
-        // Return true if class has been booked
-        return is_object($class);
+        // Return true if class has been removed from DB
+        return ! is_object($class);
     }
 }
 

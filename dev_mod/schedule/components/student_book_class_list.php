@@ -61,7 +61,7 @@ class mod_schedule_student_book_class_list extends mod_schedule_class_list_base 
                 // $student_name = 'name TODO';
             }
 
-            $table->data[$id][] = $this->get_cell_action($class);
+            $table->data[$id][] = $this->get_cell_action_button($class);
             $table->data[$id][] = $class->teacher_name;
             $table->data[$id][] = $this->get_cell_date($class);
             $table->data[$id][] = $this->get_cell_time($class);
@@ -75,9 +75,9 @@ class mod_schedule_student_book_class_list extends mod_schedule_class_list_base 
     /**
      *
      */
-    private function get_cell_action($record) {
+    private function get_cell_action_button($class) {
 
-        if ( $record->student_id !== null) {
+        if ( $class->student_id !== null) {
             $action = view_student_book_lesson_impl::ACTION_UNBOOK_CLASS;
             $label = get_string('unbook_class', 'schedule'); 
         }
@@ -86,46 +86,6 @@ class mod_schedule_student_book_class_list extends mod_schedule_class_list_base 
             $label = get_string('book_class', 'schedule'); 
         }
         
-        $url_params = array('id' => $this->cm->id);
-        $url_action = mod_schedule_tools::get_self_url($url_params);
-
-
-        $html = html_writer::start_tag(
-            'form', 
-            array(
-                'action' => $url_action,
-                'method' => 'post'
-            )
-        );
-
-        $html .= html_writer::tag(
-            'button', 
-            $label,
-            array(
-                'type'  => 'submit', 
-                'name' => 'action'
-            )
-        );
-
-        $html .= html_writer::empty_tag(
-            'input', 
-            array(
-                'type' => 'hidden',
-                'name' => 'action',
-                'value' => $action
-            )
-        );
-
-        $html .= html_writer::empty_tag(
-            'input', 
-            array(
-                'type' => 'hidden',
-                'name' => 'class_id',
-                'value' => $record->lesson_id
-            )
-        );
-
-        $html .= html_writer::end_tag('form');
-        return $html;
+        return $this->get_cell_action($class, $action, $label);
     }
 }

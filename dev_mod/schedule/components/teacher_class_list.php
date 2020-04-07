@@ -41,6 +41,7 @@ class mod_schedule_teacher_class_list extends mod_schedule_class_list_base {
 
         $table->width = '100%';
         $table->head = array(
+            'Action',
             'Teacher',
             'Student',
             'Date',
@@ -56,6 +57,7 @@ class mod_schedule_teacher_class_list extends mod_schedule_class_list_base {
                 // $student_name = 'name TODO';
             }
 
+            $table->data[$id][] = $this->get_cell_action_button($class);
             $table->data[$id][] = $class->teacher_name;
             $table->data[$id][] = $class->student_name;
 
@@ -65,5 +67,12 @@ class mod_schedule_teacher_class_list extends mod_schedule_class_list_base {
         }
 
         return $table;
+    }
+
+    private function get_cell_action_button($class) {
+        $action = view_teacher_availability_impl::ACTION_CLASS_CANCEL;
+        $label = get_string('cancel_class', 'schedule'); 
+        
+        return $this->get_cell_action($class, $action, $label);
     }
 }
