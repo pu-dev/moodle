@@ -24,6 +24,8 @@
  */
 
 $string['book_class'] = 'Book class';
+$string['unbook_class'] = 'Unbook class';
+
 $string['view_class'] = 'View class';
 
 $string['teacher_availability'] = 'Your availability';

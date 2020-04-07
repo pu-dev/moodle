@@ -29,10 +29,12 @@ class mod_schedule_teacher_availability_form_handler extends mod_schedule_form_h
         $end_hour = $cls_time['end_hour'];
         $end_minute = $cls_time['end_minute'];
 
+        // Duration in seconds
         $duration = (
             ($end_hour - $start_hour) * MINUTES_IN_HOUR +
             ($end_minute - $start_minute)
         );
+        $duration *= SECONDS_IN_MINUTE;
 
         // Get date
         $epoch_date = $form_data->class_date;

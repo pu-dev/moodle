@@ -36,9 +36,7 @@ class view_teacher_availability_impl extends view_teacher_base_impl {
     }
 
     private function display_teacher_class() {
-
-        $class_list = new mod_schedule_teacher_class_list();
+        $class_list = new mod_schedule_teacher_class_list($this->cm);
         echo html_writer::table($class_list->get_class_table());
     }
-
 }

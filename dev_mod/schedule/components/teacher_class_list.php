@@ -1,41 +1,42 @@
 <?php
+defined('MOODLE_INTERNAL') || die();
 
-class mod_schedule_teacher_class_list implements renderable {
+require_once(dirname(__FILE__).'/../../../config.php');
+require_once($CFG->dirroot.'/mod/schedule/debug.php');
+require_once($CFG->dirroot.'/mod/schedule/components/class_list_base.php');
 
-    private $class_table;
 
-    public function __construct() {
-        global $DB;
+class mod_schedule_teacher_class_list extends mod_schedule_class_list_base {
 
-        // $classes = $DB->get_records('schedule_lesson');
+    /**
+     *
+     */
+    public function __construct($cm) {
+        parent::__construct($cm);
+    }
 
-        $sql = "
-            SELECT 
-                lesson.id,
-                
-                lesson.teacher_id, 
-                teacher_user.username as teacher_name,
-                
-                lesson.student_id,
-                student_user.username as student_name,
-                
-                lesson.lesson_date,
-                lesson.lesson_duration
-              
-            FROM {schedule_lesson} as lesson
 
-            JOIN {user} as teacher_user
-                ON lesson.teacher_id=teacher_user.id
-              
-            LEFT JOIN {user} as student_user
-                ON lesson.student_id=student_user.id
+    /**
+     *
+     */
+    protected function get_sql_query() {
+        global $USER;
 
+        $sql = $this->get_sql_query_base();
+        $sql .= "
             ORDER BY 
                 lesson.lesson_date ASC
         ";
 
-        $classes = $DB->get_records_sql($sql);
+        return $sql;
+    }
 
+
+    /**
+     *
+     */
+    protected function create_table($records) {
+        
         $table = new html_table();
 
         $table->width = '100%';
@@ -47,7 +48,7 @@ class mod_schedule_teacher_class_list implements renderable {
             'Duration'
         );
 
-        foreach ($classes as $id => $class) {
+        foreach ($records as $id => $class) {
             
             $student_name = 'todo';
             // $student_name = get_string('no_student', 'schedule');
@@ -55,34 +56,14 @@ class mod_schedule_teacher_class_list implements renderable {
                 // $student_name = 'name TODO';
             }
 
-
-
             $table->data[$id][] = $class->teacher_name;
             $table->data[$id][] = $class->student_name;
 
-            # TODO
-            # get_string('date_format', '<nobr>%a %d %b %Y</nobr>'); 
-            $table->data[$id][] = userdate($class->lesson_date, '<nobr>%a %d %b %Y</nobr>');
-
-
-            // Get time
-            //
-            $table->data[$id][] = html_writer::tag(
-                'nobr', 
-                strftime('%H:%M', $class->lesson_date));
-
-            // Get duration
-            //
-            $table->data[$id][] = html_writer::tag(
-                'nobr', 
-                gmdate('H:i', $class->lesson_duration)
-            );
+            $table->data[$id][] = $this->get_cell_date($class);
+            $table->data[$id][] = $this->get_cell_time($class);
+            $table->data[$id][] = $this->get_cell_duration($class);
         }
 
-        $this->class_table = $table;
-    }
-
-    public function get_class_table() {
-        return $this->class_table;
+        return $table;
     }
 }

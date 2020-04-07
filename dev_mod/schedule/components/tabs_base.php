@@ -1,6 +1,7 @@
 <?php
 require_once(dirname(__FILE__).'/../../../config.php');
 require_once($CFG->dirroot.'/mod/schedule/tools.php');
+require_once($CFG->dirroot.'/mod/schedule/debug.php');
 
 
 abstract class mod_schedule_tabs_base implements renderable {
@@ -13,14 +14,17 @@ abstract class mod_schedule_tabs_base implements renderable {
         $this->current_tab = $currnet_tab;
     }
 
-    final protected function create_tab($tab_id, $url, $label) {
-        $fullurl = mod_schedule_tools::get_module_url() . "/" . $url;
+    final protected function create_tab($tab_id, $url_view, $label) {
+        debug($url_view);
+        $url = mod_schedule_tools::get_module_url(
+            $url_view,
+            array('id' => $this->cmid)
+        );
+        // $url = mod_schedule_tools::get_self_url();
 
         return new tabobject(
             $tab_id,
-            new moodle_url(
-                $fullurl,
-                array('id' => $this->cmid)),
+            $url,
             get_string($label, 'schedule')
         );
     }

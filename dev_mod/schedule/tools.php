@@ -19,15 +19,12 @@ class mod_schedule_tools {
     }
 
 
-    public static function get_module_url() {
-        global $CFG;
-        // $src_url = $_SERVER['PHP_SELF'];
-
-        // if ( preg_match('/mod\/schedule/', $src_url, $match) == 0 ) {
-        //     die("Problem with retrieving module url.");
-        // }
-
-        return $CFG->wwwroot."/mod/schedule";
+    public static function get_module_url($url_postfix='', $url_params=array()) {
+        $url = new moodle_url(
+            "/mod/schedule/" . $url_postfix,
+            $url_params
+        );
+        return $url;
     }
 
     public static function get_cmid() {
