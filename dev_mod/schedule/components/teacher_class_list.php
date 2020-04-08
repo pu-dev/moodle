@@ -45,7 +45,7 @@ class teacher_class_list extends class_list_base {
         $table->width = '100%';
         $table->head = array(
             'Action',
-            'Teacher',
+            // 'Teacher',
             'Student',
             'Date',
             'Time',
@@ -53,16 +53,16 @@ class teacher_class_list extends class_list_base {
         );
 
         foreach ($records as $id => $class) {
-            
-            $student_name = 'todo';
-            // $student_name = get_string('no_student', 'schedule');
-            if ($class->student_id != 0) {
-                // $student_name = 'name TODO';
+            # Todo
+            $student_name = "[ Free ]";
+
+            if ( ! is_null($class->student_id) ) {
+                $student_name = $class->student_name;
             }
 
             $table->data[$id][] = $this->get_cell_action_button($class);
-            $table->data[$id][] = $class->teacher_name;
-            $table->data[$id][] = $class->student_name;
+            // $table->data[$id][] = $class->teacher_name;
+            $table->data[$id][] = $student_name;
 
             $table->data[$id][] = $this->get_cell_date($class);
             $table->data[$id][] = $this->get_cell_time($class);
@@ -73,9 +73,9 @@ class teacher_class_list extends class_list_base {
     }
 
     private function get_cell_action_button($class) {
+        $label = get_string('cancel', 'schedule'); 
         $action = view_teacher_availability_impl::ACTION_CLASS_CANCEL;
-        $label = get_string('cancel_class', 'schedule'); 
         
-        return $this->get_cell_action($class, $action, $label);
+        return $this->get_cell_action($label, $class, $action);
     }
 }

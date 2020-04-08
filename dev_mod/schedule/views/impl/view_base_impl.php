@@ -1,8 +1,9 @@
 <?php namespace mod_schedule;
 defined('MOODLE_INTERNAL') || die();
 
-require_once(dirname(__FILE__).'/../../../../config.php');
-require_once($CFG->dirroot.'/mod/schedule/debug.php');
+require_once(dirname(__FILE__).'/../../inc.php');
+mod_require_once('/tools.php');
+mod_require_once('/views/view_result_base.php');
 
 
 abstract class view_base_impl {
@@ -41,22 +42,30 @@ abstract class view_base_impl {
         $PAGE->set_title($schedule->name);
         $PAGE->set_heading($course->fullname);
 
-        echo $OUTPUT->header();
-        echo $OUTPUT->heading(format_string($schedule->name), 2, null);
-        $this->display();
-        echo $OUTPUT->footer();       
+        $view_result = $this->render();
+
+        if ( is_null($view_result->redirect) ) {
+            echo $OUTPUT->header();
+            echo $OUTPUT->heading(format_string($schedule->name), 2, null);
+            echo $view_result->html;
+            echo $OUTPUT->footer();
+        }
+        else {
+            redirect($view_result->redirect);
+        }
     }
 
     protected function alert_success($msg) {
         global $OUTPUT;
-        echo $OUTPUT->notification($msg, "success");
+        return $OUTPUT->notification($msg, "success");
     }
 
     protected function alert_error($msg) {
         global $OUTPUT;
-        echo $OUTPUT->notification($msg, "error");
+        return $OUTPUT->notification($msg, "error");
     }
 
-    abstract protected function display();
+    abstract protected function render();
 }
+
 

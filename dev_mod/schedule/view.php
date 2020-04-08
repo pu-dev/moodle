@@ -3,25 +3,22 @@
 require_once('../../config.php');
 require_once($CFG->dirroot.'/mod/schedule/tools.php');
 
-// if ( mod_schedule_tools::is_manager() ) {
-    // return;
-// }
 
+function goto_view($view) {
+    $cmid = required_param('id', PARAM_INT);
+    $url_params = array('id'=>$cmid);
+    $url = tools::get_module_url($view, $url_params);
+    redirect($url);
+}
 
 if ( tools::is_editingteacher() ) {
-    require_once('./views/view_teacher_availability.php');
-    return;
+    goto_view('/views/view_teacher_availability.php');
 }
 
 if ( tools::is_teacher() ) {
-    require_once('./views/view_teacher_availability.php');
-    return;
+    goto_view('/views/view_teacher_availability.php');
 }
 
 if ( tools::is_student() ) {
-    require_once('./views/view_student_book_lesson.php');
-    return;
+    goto_view('/views/view_student_book_lesson.php');
 }
-
-
-

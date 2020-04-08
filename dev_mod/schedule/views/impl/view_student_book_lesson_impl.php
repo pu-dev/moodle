@@ -19,37 +19,42 @@ class view_student_book_lesson_impl extends view_student_base_impl {
         parent::__construct(student_class_tabs::TAB_BOOK_LESSON);
     }
 
-    protected function display() {
-        parent::display();
-        $this->process_action();
-        $this->display_student_book_class();
+    protected function render() {
+        $html = parent::render();
+        $html .= $this->process_action();
+        $html .= $this->render_student_book_class();
+
+        return new view_result_html($html);
     }
 
-    private function display_student_book_class() {
+    private function render_student_book_class() {
         $class_list = new student_book_class_list($this->cm);
-        echo \html_writer::table($class_list->get_class_table());
+        return \html_writer::table($class_list->get_class_table());
     }
 
     private function process_action() {
         $action = optional_param('action', self::ACTION_NONE, PARAM_INT);
         debug('Action to process: {$action}');
         
+        $html = '';
+
         switch ($action) {
             case self::ACTION_NONE:
                 // Do nothing here
                 break;
 
             case self::ACTION_BOOK_CLASS:
-                $this->action_book_class();    
+                $html = $this->action_book_class();    
                 break;
 
             case self::ACTION_UNBOOK_CLASS:
-                $this->action_unbook_class();    
+                $html = $this->action_unbook_class();    
                 break;
 
             default:
                 print_error("Invalid action: {$action}");
         }
+        return $html;
     }
 
     private function action_book_class() {
@@ -59,16 +64,19 @@ class view_student_book_lesson_impl extends view_student_base_impl {
         $class_id = required_param('class_id', PARAM_INT);
         $action = new action_student_book_class($class_id, $USER->id);
         $result = $action->execute();
-        
+        $html = '';
+
         if ($result->ok) {
             $class_date = tools::epoch_to_date($result->data->date);
             $msg = get_string('class_booked_ok', 'schedule', $class_date);
-            $this->alert_success($msg);
+            $html = $this->alert_success($msg);
         }
         else {
             $msg = get_string('class_booked_failed', 'schedule');
-            $this->alert_error($msg);
+            $html = $this->alert_error($msg);
         }
+
+        return $html;
     }
 
     private function action_unbook_class() {
@@ -77,16 +85,19 @@ class view_student_book_lesson_impl extends view_student_base_impl {
         $class_id = required_param('class_id', PARAM_INT);
         $action = new action_student_unbook_class($class_id, $USER->id);
         $result = $action->execute();
+        $html = '';
 
         if ($result->ok) {
             $class_date = tools::epoch_to_date($result->data->date);
-            $msg = get_string('class_ubbooked_ok', 'schedule', $class_date);
-            $this->alert_success($msg);
+            $msg = get_string('class_unbooked_ok', 'schedule', $class_date);
+            $html = $this->alert_success($msg);
         }
         else {
             $msg = get_string('class_unbooked_failed', 'schedule');
-            $this->alert_success($msg);
+            $html = $this->alert_success($msg);
         }
+
+        return $html;
     }
 }
 

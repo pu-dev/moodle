@@ -14,8 +14,6 @@ require_once($CFG->dirroot.'/mod/schedule/actions/action_teacher_cancel_class.ph
 class view_teacher_availability_impl extends view_teacher_base_impl {
     public const ACTION_NONE = 10;
     public const ACTION_CLASS_CANCEL = 11;
-    // public const ACTION_UNBOOK_CLASS = 12;
-
 
     public function __construct() {
         parent::__construct(
@@ -23,64 +21,69 @@ class view_teacher_availability_impl extends view_teacher_base_impl {
         );
     }
 
-
-    protected function display() {
-        parent::display();
-        $this->process_action();
-        $this->display_teacher_form();
-        $this->display_teacher_class();
+    protected function render() {
+        $html = parent::render();
+        $html .= $this->process_action();
+        $html .= $this->render_teacher_form();
+        $html .= $this->render_teacher_class();
+        return new view_result_html($html);
     }
 
-
-    private function display_teacher_form() {
+    private function render_teacher_form() {
         $form_params = array('id' => $this->cm->id);
         $url_params = $form_params;
 
         $url = tools::get_self_url($url_params);
-        debug("Form target url: {$url}");
+        
+        debug("Teache availability form target url: {$url}");
 
         $teacher_form = new teacher_availability_form($url, $form_params);
         $teacher_form_handler = new teacher_availability_form_handler($teacher_form);
 
         $teacher_form_handler->process_form();
-        $teacher_form->display();
+        return $teacher_form->render();
     }
 
 
-    private function display_teacher_class() {
+    private function render_teacher_class() {
         $class_list = new teacher_class_list($this->cm);
-        echo \html_writer::table($class_list->get_class_table());
+        return \html_writer::table($class_list->get_class_table());
     }
 
 
     private function process_action() {
         $action = optional_param('action', self::ACTION_NONE, PARAM_INT);
-        
+        $html = '';
+
         switch ($action) {
             case self::ACTION_NONE:
                 // Do nothing here
                 break;
 
             case self::ACTION_CLASS_CANCEL:
-                $this->action_class_cancel();    
+                $html = $this->action_class_cancel();    
                 break;
             default:
                 print_error("Invalid action: {$action}");
         }
+
+        return $html;
     }
 
     private function action_class_cancel() {
         $class_id = required_param('class_id', PARAM_INT);
         $action = new action_teacher_cancel_class($class_id);
         $result = $action->execute();
+        $hmlt = '';
 
         if ($result->ok) {
             $msg = get_string('class_canceled_ok', 'schedule');
-            $this->alert_success($msg);
+            $html = $this->alert_success($msg);
         }
         else {
             $msg = get_string('class_canceled_failed', 'schedule');
-            $this->alert_success($msg);
-        }        
+            $html = $this->alert_success($msg);
+        }
+        return $html;
     }
 }

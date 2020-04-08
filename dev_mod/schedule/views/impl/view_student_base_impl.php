@@ -6,7 +6,7 @@ require_once($CFG->dirroot.'/mod/schedule/views/impl/view_base_impl.php');
 require_once($CFG->dirroot.'/mod/schedule/components/student_class_tabs.php');
 
 
-class view_student_base_impl extends view_base_impl {
+abstract class view_student_base_impl extends view_base_impl {
 
     private $current_tab;
 
@@ -15,7 +15,7 @@ class view_student_base_impl extends view_base_impl {
         parent::__construct();
     }
 
-    protected function display() {
+    protected function render() {
         global $OUTPUT, $PAGE;
 
         $renderer = $PAGE->get_renderer('mod_schedule');
@@ -23,7 +23,7 @@ class view_student_base_impl extends view_base_impl {
             $this->cm->id,
             $this->current_tab
         );
-        echo $renderer->render($student_tabs);
+        return $renderer->render($student_tabs);
     }
 }
 

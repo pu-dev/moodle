@@ -10,22 +10,11 @@ class teacher_availability_form extends \moodleform {
     /**
     */
     public function definition() {
-        global $CFG, $USER;
-
-        $this->add_course_id();
         $this->create_date_selector();
         $this->create_time_selector();
         $this->create_bottom_buttons();
     }
 
-
-    private function add_course_id() {
-        $mform =& $this->_form;
-        // $cmid = $this->_customdata['id'];
-        // $mform->addElement('hidden', 'cmid', $cmid);
-        // $mform->setType('cmid', PARAM_INT);
-
-    }
 
     /**
     */
@@ -69,7 +58,7 @@ class teacher_availability_form extends \moodleform {
 
         $buttonarray=array();
         $buttonarray[] =& $mform->createElement('submit', 'submitbutton', get_string('savechanges'));
-        $buttonarray[] =& $mform->createElement('submit', 'cancel', get_string('cancel'));
-        $mform->addGroup($buttonarray, 'buttonar', '', array(' '), true);
+        // $buttonarray[] =& $mform->createElement('cancel', 'cancelbutton', get_string('cancel'));
+        $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
     }
 }

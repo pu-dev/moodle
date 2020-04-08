@@ -6,7 +6,6 @@ require_once($CFG->dirroot.'/mod/schedule/debug.php');
 
 
 class tools {
- 
     public static function get_self_url($url_params=null) {
         $src_url = $_SERVER['PHP_SELF'];
 
@@ -71,8 +70,16 @@ class tools {
         return has_capability('mod/schedule:manager', $context);
     }
 
+    public static function epoch_to_date($seconds, $nobr=false) {
+        $date = \userdate($seconds, '%a %d %b %Y');
+        if ( $nobr ) {
+            $date = "<nobr>{$date}</nobr>";
+        }
+        return $date;
+    }
 
-    public static function epoch_to_date($seconds) {
-        return \userdate($seconds, '<nobr>%a %d %b %Y</nobr>');
+
+    public static function truncate($txt, $len) {
+        return strlen($in) > $len ? substr($in, 0, $len)."..." : $in;
     }
 }

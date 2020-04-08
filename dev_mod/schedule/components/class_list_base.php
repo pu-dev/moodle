@@ -1,9 +1,10 @@
 <?php namespace mod_schedule;
 defined('MOODLE_INTERNAL') || die();
 
-require_once(dirname(__FILE__).'/../../../config.php');
-require_once($CFG->dirroot.'/mod/schedule/tools.php');
-require_once($CFG->dirroot.'/mod/schedule/debug.php');
+require_once(dirname(__FILE__).'/../inc.php');
+mod_require_once('/tools.php');
+mod_require_once('/sql.php');
+
 
 
 abstract class class_list_base implements \renderable {
@@ -26,31 +27,11 @@ abstract class class_list_base implements \renderable {
         return $this->class_table;
     }
 
+
     final protected function get_sql_query_base() {
-        $sql = "
-            SELECT 
-                lesson.id as lesson_id,
-                
-                lesson.teacher_id as teacher_id,
-                teacher_user.username as teacher_name,
-                
-                lesson.student_id as student_id,
-                student_user.username as student_name,
-                
-                lesson.date,
-                lesson.duration
-              
-            FROM {schedule_lesson} as lesson
-
-            JOIN {user} as teacher_user
-                ON lesson.teacher_id=teacher_user.id
-              
-            LEFT JOIN {user} as student_user
-                ON lesson.student_id=student_user.id
-        ";
-
-        return $sql;
+        return sql::join_lesson_student_teacher();
     }
+
 
     final protected function get_cell_time($class) {
         return \html_writer::tag(
@@ -69,18 +50,54 @@ abstract class class_list_base implements \renderable {
 
 
     final protected function get_cell_date($class) {
-         return tools::epoch_to_date($class->date);
+         return tools::epoch_to_date($class->date, true);
     }
 
 
-    final protected function get_cell_action($class, $action, $label) {
-        $url_params = array('id' => $this->cm->id);
-        $url_action = tools::get_self_url($url_params);
+    final protected function get_cell_topic($class) {
+        if ( ! isset($class->topic) ) {
+            # todo
+            return "[ blank ]";
+        }
+        return nl2br($class->topic);
+    }
 
+
+    final protected function get_cell_notes($class) {
+        if ( ! isset($class->notes) ) {
+            # todo 
+            return "[ blank ]";
+        }
+        return nl2br($class->notes);
+    }
+
+
+    final protected function get_cell_action(
+        $label,
+        $class=null, 
+        $action=null, 
+        $url_target=null,
+        $url_params=null
+    ) {
+        $url_params_base = array('id' => $this->cm->id);
+
+        if ( is_null($url_params) ) {
+            $url_params = $url_params_base;
+        }
+        else {
+            $url_params = array_merge($url_params, $url_params_base);
+        }
+
+        if ( is_null($url_target) ) {
+            $url_target = tools::get_self_url($url_params);    
+        } else {
+            $url_target = tools::get_module_url($url_target, $url_params);  
+        }
+        
         $html = \html_writer::start_tag(
             'form', 
             array(
-                'action' => $url_action,
+                'action' => $url_target,
                 'method' => 'post'
             )
         );
@@ -94,23 +111,27 @@ abstract class class_list_base implements \renderable {
             )
         );
 
-        $html .= \html_writer::empty_tag(
-            'input', 
-            array(
-                'type' => 'hidden',
-                'name' => 'action',
-                'value' => $action
-            )
-        );
+        if ( ! is_null($action) ) {
+            $html .= \html_writer::empty_tag(
+                'input', 
+                array(
+                    'type' => 'hidden',
+                    'name' => 'action',
+                    'value' => $action
+                )
+            );
+        }
 
-        $html .= \html_writer::empty_tag(
-            'input', 
-            array(
-                'type' => 'hidden',
-                'name' => 'class_id',
-                'value' => $class->lesson_id
-            )
-        );
+        if ( ! is_null($action) ) {
+            $html .= \html_writer::empty_tag(
+                'input', 
+                array(
+                    'type' => 'hidden',
+                    'name' => 'class_id',
+                    'value' => $class->lesson_id
+                )
+            );
+        }
 
         $html .= \html_writer::end_tag('form');
         return $html;
