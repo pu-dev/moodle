@@ -1,11 +1,14 @@
-<?php
+<?php namespace mod_schedule;
+defined('MOODLE_INTERNAL') || die();
+
 require_once(dirname(__FILE__).'/../../../config.php');
 require_once($CFG->dirroot.'/mod/schedule/components/tabs_base.php');
 
 
-class mod_schedule_student_class_tabs extends mod_schedule_tabs_base implements renderable {
+class student_class_tabs extends tabs_base implements \renderable {
     public const TAB_BOOK_LESSON = 1;
-    public const TAB_VIEW_LESSON = 2;
+    public const TAB_NEW_LESSON = 2;
+    public const TAB_OLD_LESSON = 3;
 
     public function __construct($cmid, $current_tab) {
         parent::__construct($cmid, $current_tab);
@@ -17,13 +20,19 @@ class mod_schedule_student_class_tabs extends mod_schedule_tabs_base implements 
         $tabs[] = $this->create_tab(
             self::TAB_BOOK_LESSON,
             "views/view_student_book_lesson.php",
-            "book_class"
+            "book"
         );
 
         $tabs[] = $this->create_tab(
-            self::TAB_VIEW_LESSON,
-            "views/view_student_view_lesson.php",
-            "view_class"
+            self::TAB_NEW_LESSON,
+            "views/view_student_new_lesson.php",
+            "new_lessons"
+        );
+
+        $tabs[] = $this->create_tab(
+            self::TAB_OLD_LESSON,
+            "views/view_student_old_lesson.php",
+            "old_lessons"
         );
 
         return array($tabs);

@@ -1,10 +1,12 @@
-<?php
+<?php namespace mod_schedule;
+defined('MOODLE_INTERNAL') || die();
+
 require_once(dirname(__FILE__).'/../../../config.php');
 require_once($CFG->dirroot.'/mod/schedule/tools.php');
 require_once($CFG->dirroot.'/mod/schedule/debug.php');
 
 
-abstract class mod_schedule_tabs_base implements renderable {
+abstract class tabs_base implements \renderable {
     public $cmid;
     public $current_tab;
 
@@ -15,12 +17,12 @@ abstract class mod_schedule_tabs_base implements renderable {
     }
 
     final protected function create_tab($tab_id, $url_view, $label) {
-        $url = mod_schedule_tools::get_module_url(
+        $url = tools::get_module_url(
             $url_view,
             array('id' => $this->cmid)
         );
 
-        return new tabobject(
+        return new \tabobject(
             $tab_id,
             $url,
             get_string($label, 'schedule')

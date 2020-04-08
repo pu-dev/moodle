@@ -1,4 +1,4 @@
-<?php
+<?php namespace mod_schedule;
 require_once(dirname(__FILE__).'/../../config.php');
 
 // error_reporting(E_ALL);

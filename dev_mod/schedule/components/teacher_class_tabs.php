@@ -1,9 +1,11 @@
-<?php
+<?php namespace mod_schedule;
+defined('MOODLE_INTERNAL') || die();
+
 require_once(dirname(__FILE__).'/../../../config.php');
 require_once($CFG->dirroot.'/mod/schedule/components/tabs_base.php');
 
 
-class mod_schedule_teacher_class_tabs extends mod_schedule_tabs_base implements renderable {
+class teacher_class_tabs extends tabs_base implements \renderable {
     const TAB_AVAILABILITY_LESSON = 1;
     const TAB_OTHER_LESSON = 2;
 

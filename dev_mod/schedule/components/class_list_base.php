@@ -1,4 +1,4 @@
-<?php
+<?php namespace mod_schedule;
 defined('MOODLE_INTERNAL') || die();
 
 require_once(dirname(__FILE__).'/../../../config.php');
@@ -6,7 +6,7 @@ require_once($CFG->dirroot.'/mod/schedule/tools.php');
 require_once($CFG->dirroot.'/mod/schedule/debug.php');
 
 
-abstract class mod_schedule_class_list_base implements renderable {
+abstract class class_list_base implements \renderable {
 
     protected $class_table;
     protected $cm;
@@ -53,7 +53,7 @@ abstract class mod_schedule_class_list_base implements renderable {
     }
 
     final protected function get_cell_time($class) {
-        return html_writer::tag(
+        return \html_writer::tag(
             'nobr', 
             strftime('%H:%M', $class->lesson_date)
         );
@@ -61,7 +61,7 @@ abstract class mod_schedule_class_list_base implements renderable {
 
 
     final protected function get_cell_duration($class) {
-        return html_writer::tag(
+        return \html_writer::tag(
             'nobr', 
             gmdate('H:i', $class->lesson_duration)
         );
@@ -69,15 +69,15 @@ abstract class mod_schedule_class_list_base implements renderable {
 
 
     final protected function get_cell_date($class) {
-         return mod_schedule_tools::epoch_to_date($class->lesson_date);
+         return tools::epoch_to_date($class->lesson_date);
     }
 
 
     final protected function get_cell_action($class, $action, $label) {
         $url_params = array('id' => $this->cm->id);
-        $url_action = mod_schedule_tools::get_self_url($url_params);
+        $url_action = tools::get_self_url($url_params);
 
-        $html = html_writer::start_tag(
+        $html = \html_writer::start_tag(
             'form', 
             array(
                 'action' => $url_action,
@@ -85,7 +85,7 @@ abstract class mod_schedule_class_list_base implements renderable {
             )
         );
 
-        $html .= html_writer::tag(
+        $html .= \html_writer::tag(
             'button', 
             $label,
             array(
@@ -94,7 +94,7 @@ abstract class mod_schedule_class_list_base implements renderable {
             )
         );
 
-        $html .= html_writer::empty_tag(
+        $html .= \html_writer::empty_tag(
             'input', 
             array(
                 'type' => 'hidden',
@@ -103,7 +103,7 @@ abstract class mod_schedule_class_list_base implements renderable {
             )
         );
 
-        $html .= html_writer::empty_tag(
+        $html .= \html_writer::empty_tag(
             'input', 
             array(
                 'type' => 'hidden',
@@ -112,7 +112,7 @@ abstract class mod_schedule_class_list_base implements renderable {
             )
         );
 
-        $html .= html_writer::end_tag('form');
+        $html .= \html_writer::end_tag('form');
         return $html;
     }
 

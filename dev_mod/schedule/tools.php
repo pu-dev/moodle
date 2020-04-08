@@ -1,9 +1,11 @@
-<?php
+<?php namespace mod_schedule;
+defined('MOODLE_INTERNAL') || die();
+
 require_once(dirname(__FILE__).'/../../config.php');
 require_once($CFG->dirroot.'/mod/schedule/debug.php');
 
 
-class mod_schedule_tools {
+class tools {
  
     public static function get_self_url($url_params=null) {
         $src_url = $_SERVER['PHP_SELF'];
@@ -12,13 +14,13 @@ class mod_schedule_tools {
             die("Problem with retrieving self url.");
         }
 
-        $url = new moodle_url($match[0], $url_params);
+        $url = new \moodle_url($match[0], $url_params);
         return $url;
     }
 
 
     public static function get_module_url($url_postfix='', $url_params=array()) {
-        $url = new moodle_url(
+        $url = new \moodle_url(
             "/mod/schedule/" . $url_postfix,
             $url_params
         );
@@ -36,7 +38,7 @@ class mod_schedule_tools {
             $cmid = self::get_cmid();
         }
 
-        $context = context_module::instance($cmid);
+        $context = \context_module::instance($cmid);
         return has_capability('mod/schedule:student', $context);
     }
 
@@ -46,7 +48,7 @@ class mod_schedule_tools {
             $cmid = self::get_cmid();
         }
 
-        $context = context_module::instance($cmid);
+        $context = \context_module::instance($cmid);
         return has_capability('mod/schedule:teacher', $context);
     }
 
@@ -56,7 +58,7 @@ class mod_schedule_tools {
             $cmid = self::get_cmid();
         }
 
-        $context = context_module::instance($cmid);
+        $context = \context_module::instance($cmid);
         return has_capability('mod/schedule:editingteacher', $context);
     }
 
@@ -65,12 +67,12 @@ class mod_schedule_tools {
         if (is_null($cmid)) {
             $cmid = self::get_cmid();
         }
-        $context = context_module::instance($cmid);
+        $context = \context_module::instance($cmid);
         return has_capability('mod/schedule:manager', $context);
     }
 
 
     public static function epoch_to_date($seconds) {
-        return userdate($seconds, '<nobr>%a %d %b %Y</nobr>');
+        return \userdate($seconds, '<nobr>%a %d %b %Y</nobr>');
     }
 }

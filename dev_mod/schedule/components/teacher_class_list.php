@@ -1,4 +1,4 @@
-<?php
+<?php namespace mod_schedule;
 defined('MOODLE_INTERNAL') || die();
 
 require_once(dirname(__FILE__).'/../../../config.php');
@@ -6,7 +6,7 @@ require_once($CFG->dirroot.'/mod/schedule/debug.php');
 require_once($CFG->dirroot.'/mod/schedule/components/class_list_base.php');
 
 
-class mod_schedule_teacher_class_list extends mod_schedule_class_list_base {
+class teacher_class_list extends class_list_base {
 
     /**
      *
@@ -26,7 +26,7 @@ class mod_schedule_teacher_class_list extends mod_schedule_class_list_base {
         $sql .= "
             WHERE
                 teacher_id = {$USER->id}
-                
+
             ORDER BY 
                 lesson.lesson_date ASC
         ";
@@ -40,7 +40,7 @@ class mod_schedule_teacher_class_list extends mod_schedule_class_list_base {
      */
     protected function create_table($records) {
         
-        $table = new html_table();
+        $table = new \html_table();
 
         $table->width = '100%';
         $table->head = array(

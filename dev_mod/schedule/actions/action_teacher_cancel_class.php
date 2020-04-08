@@ -1,7 +1,9 @@
-<?php
+<?php namespace mod_schedule;
+
 require_once(dirname(__FILE__).'/../../../config.php');
 require_once($CFG->dirroot.'/mod/schedule/debug.php');
 require_once($CFG->dirroot.'/mod/schedule/actions/action_base.php');
+
 
 class action_teacher_cancel_class extends action_base {
     private $class_id;

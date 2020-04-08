@@ -1,7 +1,8 @@
-<?php
+<?php namespace mod_schedule;
+defined('MOODLE_INTERNAL') || die();
+
 require_once(dirname(__FILE__).'/../../../../config.php');
 require_once($CFG->dirroot.'/mod/schedule/debug.php');
-
 
 
 abstract class view_base_impl {
@@ -33,7 +34,7 @@ abstract class view_base_impl {
         }
 
         $url_params = array('id' => $cm->id);
-        $url_self = mod_schedule_tools::get_self_url($url_params);
+        $url_self = tools::get_self_url($url_params);
         debug("Set self url for the page: $url_self");
 
         $PAGE->set_url($url_self);
@@ -50,7 +51,7 @@ abstract class view_base_impl {
         global $OUTPUT;
         echo $OUTPUT->notification($msg, "success");
     }
-    
+
     protected function alert_error($msg) {
         global $OUTPUT;
         echo $OUTPUT->notification($msg, "error");

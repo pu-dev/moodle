@@ -1,9 +1,11 @@
-<?php
+<?php namespace mod_schedule;
+defined('MOODLE_INTERNAL') || die();
+
 require_once(dirname(__FILE__).'/../../../config.php');
 require_once($CFG->libdir.'/formslib.php');
 
 
-class mod_schedule_teacher_availability_form extends moodleform {
+class teacher_availability_form extends \moodleform {
 
     /**
     */

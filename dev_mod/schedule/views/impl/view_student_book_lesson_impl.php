@@ -1,4 +1,6 @@
-<?php
+<?php namespace mod_schedule;
+defined('MOODLE_INTERNAL') || die(__FILE__);
+
 require_once(dirname(__FILE__).'/../../../../config.php');
 require_once($CFG->dirroot.'/mod/schedule/debug.php');
 require_once($CFG->dirroot.'/mod/schedule/tools.php');
@@ -14,9 +16,7 @@ class view_student_book_lesson_impl extends view_student_base_impl {
     public const ACTION_UNBOOK_CLASS = 12;
 
     public function __construct() {
-        parent::__construct(
-            mod_schedule_student_class_tabs::TAB_BOOK_LESSON
-        );
+        parent::__construct(student_class_tabs::TAB_BOOK_LESSON);
     }
 
     protected function display() {
@@ -26,8 +26,8 @@ class view_student_book_lesson_impl extends view_student_base_impl {
     }
 
     private function display_student_book_class() {
-        $class_list = new mod_schedule_student_book_class_list($this->cm);
-        echo html_writer::table($class_list->get_class_table());
+        $class_list = new student_book_class_list($this->cm);
+        echo \html_writer::table($class_list->get_class_table());
     }
 
     private function process_action() {
@@ -59,14 +59,14 @@ class view_student_book_lesson_impl extends view_student_base_impl {
         $class_id = required_param('class_id', PARAM_INT);
         $action = new action_student_book_class($class_id, $USER->id);
         $result = $action->execute();
-        $class_date = mod_schedule_tools::epoch_to_date($result->data->lesson_date);
-
+        
         if ($result->ok) {
+            $class_date = tools::epoch_to_date($result->data->lesson_date);
             $msg = get_string('class_booked_ok', 'schedule', $class_date);
             $this->alert_success($msg);
         }
         else {
-            $msg = get_string('class_booked_failed', 'schedule', $class_date);
+            $msg = get_string('class_booked_failed', 'schedule');
             $this->alert_error($msg);
         }
     }
@@ -77,9 +77,9 @@ class view_student_book_lesson_impl extends view_student_base_impl {
         $class_id = required_param('class_id', PARAM_INT);
         $action = new action_student_unbook_class($class_id, $USER->id);
         $result = $action->execute();
-        $class_date = mod_schedule_tools::epoch_to_date($result->data->lesson_date);
 
         if ($result->ok) {
+            $class_date = tools::epoch_to_date($result->data->lesson_date);
             $msg = get_string('class_ubbooked_ok', 'schedule', $class_date);
             $this->alert_success($msg);
         }

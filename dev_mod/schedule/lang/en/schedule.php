@@ -2,15 +2,19 @@
 
 $string['modulename'] = 'Schedule';
 
-$string['book_class'] = 'Book class';
-$string['cancel_class'] = 'Cancel class';
-$string['unbook_class'] = 'Unbook class';
+$string['book'] = 'Book';
+$string['cancel'] = 'Cancel';
+$string['unbook'] = 'Unbook';
+
+$string['new_lessons'] = 'New lessons';
+$string['old_lessons'] = 'Old lessons';
+
 
 
 $string['class_booked_ok'] = 'You booked the class on {$a}';
-$string['class_booked_failed'] = 'Failed to book the class for {$a}';
+$string['class_booked_failed'] = 'Failed to book the class';
 
-$string['class_unbooked_ok'] = 'The class on {$a},  has been unbooked';
+$string['class_unbooked_ok'] = 'The class on {$a}, has been unbooked';
 $string['class_unbooked_failed'] = 'Failed to unbook the class';
 
 $string['class_canceled_ok'] = 'The class has been canceled';

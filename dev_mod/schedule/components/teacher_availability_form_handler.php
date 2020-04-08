@@ -1,4 +1,4 @@
-<?php
+<?php namespace mod_schedule;
 defined('MOODLE_INTERNAL') || die();
 
 require_once(dirname(__FILE__).'/../../../config.php');
@@ -6,7 +6,7 @@ require_once($CFG->dirroot.'/mod/schedule/debug.php');
 require_once($CFG->dirroot.'/mod/schedule/components/form_handler_base.php');
 
 
-class mod_schedule_teacher_availability_form_handler extends mod_schedule_form_handler_base {
+class teacher_availability_form_handler extends form_handler_base {
     public function __construct($form) {
         parent::__construct($form);
     }
@@ -44,7 +44,7 @@ class mod_schedule_teacher_availability_form_handler extends mod_schedule_form_h
         );
 
         // Create 'class' representation
-        $class = new stdClass;
+        $class = new \stdClass;
         $class->schedule_id = 1; # TODO
         $class->teacher_id = $USER->id;
         $class->student_id = null;

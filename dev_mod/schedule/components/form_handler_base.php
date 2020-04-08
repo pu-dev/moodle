@@ -1,11 +1,11 @@
-<?php
+<?php namespace mod_schedule;
 defined('MOODLE_INTERNAL') || die();
 
 require_once(dirname(__FILE__).'/../../../config.php');
 require_once($CFG->dirroot.'/mod/schedule/debug.php');
 
 
-abstract class mod_schedule_form_handler_base {
+abstract class form_handler_base {
     public const FORM_SAVED = 1;
     public const FORM_CANCELED = 2;
     public const FORM_REDISPLAYED = 3;

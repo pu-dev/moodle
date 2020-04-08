@@ -1,4 +1,4 @@
-<?php
+<?php namespace mod_schedule;
 defined('MOODLE_INTERNAL') || die();
 
 require_once(dirname(__FILE__).'/../../../config.php');
@@ -6,7 +6,7 @@ require_once($CFG->dirroot.'/mod/schedule/debug.php');
 require_once($CFG->dirroot.'/mod/schedule/components/class_list_base.php');
 
 
-class mod_schedule_student_book_class_list extends mod_schedule_class_list_base {
+class student_book_class_list extends class_list_base {
 
     /**
      *
@@ -41,7 +41,7 @@ class mod_schedule_student_book_class_list extends mod_schedule_class_list_base 
      *
      */
     protected function create_table($records) {
-        $table = new html_table();
+        $table = new \html_table();
 
         $table->width = '100%';
         # Todo
@@ -79,11 +79,11 @@ class mod_schedule_student_book_class_list extends mod_schedule_class_list_base 
 
         if ( $class->student_id !== null) {
             $action = view_student_book_lesson_impl::ACTION_UNBOOK_CLASS;
-            $label = get_string('unbook_class', 'schedule'); 
+            $label = get_string('unbook', 'schedule'); 
         }
         else {
             $action = view_student_book_lesson_impl::ACTION_BOOK_CLASS;
-            $label = get_string('book_class', 'schedule'); 
+            $label = get_string('book', 'schedule'); 
         }
         
         return $this->get_cell_action($class, $action, $label);

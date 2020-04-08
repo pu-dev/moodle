@@ -1,4 +1,6 @@
-<?php
+<?php namespace mod_schedule;
+defined('MOODLE_INTERNAL') || die();
+
 require_once(dirname(__FILE__).'/../../../../config.php');
 require_once($CFG->dirroot.'/mod/schedule/views/impl/view_base_impl.php');
 require_once($CFG->dirroot.'/mod/schedule/components/teacher_class_tabs.php');
@@ -15,7 +17,7 @@ class view_teacher_base_impl extends view_base_impl {
         global $OUTPUT, $PAGE;
 
         $renderer = $PAGE->get_renderer('mod_schedule');
-        $teacher_tabs = new mod_schedule_teacher_class_tabs(
+        $teacher_tabs = new teacher_class_tabs(
             $this->cm->id,
             $this->current_tab
         );

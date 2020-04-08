@@ -1,4 +1,5 @@
-<?php
+<?php namespace mod_schedule;
+
 require_once(dirname(__FILE__).'/../../../config.php');
 require_once($CFG->dirroot.'/mod/schedule/debug.php');
 require_once($CFG->dirroot.'/mod/schedule/actions/action_base.php');
