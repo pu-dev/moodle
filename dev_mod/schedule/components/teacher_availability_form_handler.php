@@ -48,8 +48,8 @@ class teacher_availability_form_handler extends form_handler_base {
         $class->schedule_id = 1; # TODO
         $class->teacher_id = $USER->id;
         $class->student_id = null;
-        $class->lesson_date = $epoch_date;
-        $class->lesson_duration = $duration;
+        $class->date = $epoch_date;
+        $class->duration = $duration;
 
         $class->id = $DB->insert_record('schedule_lesson', $class);
 

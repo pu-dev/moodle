@@ -29,7 +29,7 @@ class student_book_class_list extends class_list_base {
                 student_user.id is null
 
             ORDER BY 
-                lesson.lesson_date ASC,
+                lesson.date ASC,
                 lesson.id ASC
         ";
 

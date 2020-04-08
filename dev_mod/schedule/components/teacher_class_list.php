@@ -28,7 +28,7 @@ class teacher_class_list extends class_list_base {
                 teacher_id = {$USER->id}
 
             ORDER BY 
-                lesson.lesson_date ASC
+                lesson.date ASC
         ";
 
         return $sql;

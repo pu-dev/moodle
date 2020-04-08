@@ -37,8 +37,8 @@ abstract class class_list_base implements \renderable {
                 lesson.student_id as student_id,
                 student_user.username as student_name,
                 
-                lesson.lesson_date,
-                lesson.lesson_duration
+                lesson.date,
+                lesson.duration
               
             FROM {schedule_lesson} as lesson
 
@@ -55,7 +55,7 @@ abstract class class_list_base implements \renderable {
     final protected function get_cell_time($class) {
         return \html_writer::tag(
             'nobr', 
-            strftime('%H:%M', $class->lesson_date)
+            strftime('%H:%M', $class->date)
         );
     }
 
@@ -63,13 +63,13 @@ abstract class class_list_base implements \renderable {
     final protected function get_cell_duration($class) {
         return \html_writer::tag(
             'nobr', 
-            gmdate('H:i', $class->lesson_duration)
+            gmdate('H:i', $class->duration)
         );
     }
 
 
     final protected function get_cell_date($class) {
-         return tools::epoch_to_date($class->lesson_date);
+         return tools::epoch_to_date($class->date);
     }
 
 

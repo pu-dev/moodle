@@ -61,7 +61,7 @@ class view_student_book_lesson_impl extends view_student_base_impl {
         $result = $action->execute();
         
         if ($result->ok) {
-            $class_date = tools::epoch_to_date($result->data->lesson_date);
+            $class_date = tools::epoch_to_date($result->data->date);
             $msg = get_string('class_booked_ok', 'schedule', $class_date);
             $this->alert_success($msg);
         }
@@ -79,7 +79,7 @@ class view_student_book_lesson_impl extends view_student_base_impl {
         $result = $action->execute();
 
         if ($result->ok) {
-            $class_date = tools::epoch_to_date($result->data->lesson_date);
+            $class_date = tools::epoch_to_date($result->data->date);
             $msg = get_string('class_ubbooked_ok', 'schedule', $class_date);
             $this->alert_success($msg);
         }
