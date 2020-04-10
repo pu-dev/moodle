@@ -5,7 +5,7 @@ require_once(dirname(__FILE__).'/../inc.php');
 mod_require_once('/components/edit_lesson_form_base.php');
 
 
-class student_edit_lesson_form extends edit_lesson_form_base {
+class teacher_edit_lesson_form extends edit_lesson_form_base {
     public function definition() {
         parent::definition();
     }

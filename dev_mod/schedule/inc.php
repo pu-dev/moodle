@@ -2,6 +2,7 @@
 
 require_once(dirname(__FILE__).'/../../config.php');
 mod_require_once('/debug.php');
+mod_require_once('/view_tools.php');
 
 function mod_require_once($file) {
     global $CFG;

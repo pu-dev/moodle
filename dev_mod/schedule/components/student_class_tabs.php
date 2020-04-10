@@ -20,19 +20,21 @@ class student_class_tabs extends tabs_base implements \renderable {
         $tabs[] = $this->create_tab(
             self::TAB_BOOK_LESSON,
             "views/view_student_book_lesson.php",
-            "book"
+            # 
+            "Book class"
         );
 
         $tabs[] = $this->create_tab(
             self::TAB_NEW_LESSON,
             "views/view_student_new_lesson.php",
-            "new_lessons"
+            # Todo 
+            "Booked classes"
         );
 
         $tabs[] = $this->create_tab(
             self::TAB_OLD_LESSON,
             "views/view_student_old_lesson.php",
-            "old_lessons"
+            "Old classes"
         );
 
         return array($tabs);

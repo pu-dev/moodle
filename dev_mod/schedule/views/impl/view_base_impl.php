@@ -7,6 +7,7 @@ mod_require_once('/views/view_result_base.php');
 
 
 abstract class view_base_impl {
+    protected $schedule;
 
     public function __construct() {
         global $DB, $PAGE, $OUTPUT;
@@ -30,7 +31,7 @@ abstract class view_base_impl {
         require_login($course, true, $cm);
         // require_course_login($course, false, $cm);
 
-        if (!$schedule = schedule_get_schedule($cm->instance)) {
+        if (! $this->schedule = schedule_get_schedule($cm->instance)) {
             print_error('invalidcoursemodule');
         }
 
@@ -39,16 +40,22 @@ abstract class view_base_impl {
         debug("Set self url for the page: $url_self");
 
         $PAGE->set_url($url_self);
-        $PAGE->set_title($schedule->name);
+        $PAGE->set_title($this->schedule->name);
         $PAGE->set_heading($course->fullname);
+    }
+
+    public function view() {
+        global $OUTPUT;
 
         $view_result = $this->render();
 
         if ( is_null($view_result->redirect) ) {
-            echo $OUTPUT->header();
-            echo $OUTPUT->heading(format_string($schedule->name), 2, null);
-            echo $view_result->html;
-            echo $OUTPUT->footer();
+            $html = '';
+            $html .= $OUTPUT->header();
+            $html .= $OUTPUT->heading(format_string($this->schedule->name), 2, null);
+            $html .= $view_result->html;
+            $html .= $OUTPUT->footer();
+            return $html;
         }
         else {
             redirect($view_result->redirect);

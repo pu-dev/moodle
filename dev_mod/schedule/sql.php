@@ -19,6 +19,7 @@ class sql {
                 
                 lesson.date,
                 lesson.duration,
+                (lesson.date + lesson.duration) as end_date,
                 lesson.topic,
                 lesson.notes
 

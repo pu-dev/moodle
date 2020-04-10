@@ -82,4 +82,6 @@ class tools {
     public static function truncate($txt, $len) {
         return strlen($in) > $len ? substr($in, 0, $len)."..." : $in;
     }
+
+    
 }

@@ -1,14 +1,13 @@
 <?php namespace mod_schedule;
 defined('MOODLE_INTERNAL') || die();
 
-require_once(dirname(__FILE__).'/../../../../config.php');
-require_once($CFG->dirroot.'/mod/schedule/tools.php');
-require_once($CFG->dirroot.'/mod/schedule/debug.php');
-require_once($CFG->dirroot.'/mod/schedule/views/impl/view_teacher_base_impl.php');
-require_once($CFG->dirroot.'/mod/schedule/components/teacher_availability_form.php');
-require_once($CFG->dirroot.'/mod/schedule/components/teacher_availability_form_handler.php');
-require_once($CFG->dirroot.'/mod/schedule/components/teacher_class_list.php');
-require_once($CFG->dirroot.'/mod/schedule/actions/action_teacher_cancel_class.php');
+require_once(dirname(__FILE__).'/../../inc.php');
+mod_require_once('/tools.php');
+mod_require_once('/views/impl/view_teacher_base_impl.php');
+mod_require_once('/components/teacher_availability_form.php');
+mod_require_once('/components/teacher_availability_form_handler.php');
+mod_require_once('/components/teacher_manage_lesson_list.php');
+mod_require_once('/actions/action_teacher_cancel_class.php');
 
 
 class view_teacher_availability_impl extends view_teacher_base_impl {
@@ -16,16 +15,14 @@ class view_teacher_availability_impl extends view_teacher_base_impl {
     public const ACTION_CLASS_CANCEL = 11;
 
     public function __construct() {
-        parent::__construct(
-            teacher_class_tabs::TAB_AVAILABILITY_LESSON
-        );
+        parent::__construct(teacher_class_tabs::TAB_AVAILABILITY_LESSON);
     }
 
     protected function render() {
         $html = parent::render();
         $html .= $this->process_action();
         $html .= $this->render_teacher_form();
-        $html .= $this->render_teacher_class();
+        $html .= $this->render_teacher_lesson_list();
         return new view_result_html($html);
     }
 
@@ -45,8 +42,8 @@ class view_teacher_availability_impl extends view_teacher_base_impl {
     }
 
 
-    private function render_teacher_class() {
-        $class_list = new teacher_class_list($this->cm);
+    private function render_teacher_lesson_list() {
+        $class_list = new teacher_manage_lesson_list($this->cm);
         return \html_writer::table($class_list->get_class_table());
     }
 

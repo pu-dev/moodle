@@ -7,7 +7,8 @@ require_once($CFG->dirroot.'/mod/schedule/components/tabs_base.php');
 
 class teacher_class_tabs extends tabs_base implements \renderable {
     const TAB_AVAILABILITY_LESSON = 1;
-    const TAB_OTHER_LESSON = 2;
+    const TAB_BOOKED_LESSON = 2;
+    const TAB_OLD_LESSON = 3;
 
 
     public function __construct($cmid, $current_tab) {
@@ -20,15 +21,23 @@ class teacher_class_tabs extends tabs_base implements \renderable {
         $tabs[] = $this->create_tab(
             self::TAB_AVAILABILITY_LESSON,
             "views/view_teacher_availability.php",
-            "teacher_availability"
+            # Todo
+            "Your availability"
         );
 
         $tabs[] = $this->create_tab(
-            self::TAB_OTHER_LESSON,
-            "views/view_teacher_other.php",
-            "teacher_booked_class"
+            self::TAB_BOOKED_LESSON,
+            "views/view_teacher_booked_lesson.php",
+            # Todo
+            "Booked classes"
         );
 
+        $tabs[] = $this->create_tab(
+            self::TAB_OLD_LESSON,
+            "views/view_teacher_old_lesson.php",
+            # Todo
+            "Old classes"
+        );
         return array($tabs);
     }
 }

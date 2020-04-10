@@ -5,7 +5,7 @@ require_once(dirname(__FILE__).'/../inc.php');
 mod_require_once('/components/class_list_base.php');
 
 
-class student_old_lesson_list extends class_list_base {
+class teacher_old_lesson_list extends class_list_base {
 
     public function __construct($cm) {
         parent::__construct($cm);
@@ -19,8 +19,9 @@ class student_old_lesson_list extends class_list_base {
         $sql = $this->get_sql_query_base();
         $sql .= "
             WHERE
-                student_user.id = {$USER->id} AND
-                (lesson.date + lesson.duration) < {$time}
+                teacher_id = {$USER->id} 
+                AND student_id IS NOT NULL
+                AND (lesson.date + lesson.duration) < {$time}
 
             ORDER BY 
                 lesson.date ASC,
@@ -36,10 +37,11 @@ class student_old_lesson_list extends class_list_base {
         $table->width = '100%';
 
         $table->head = array(
+            # todo
             'Action',
             'Topic',
             'Notes',
-            'Teacher',
+            'Student',
             'Date',
         );
 
@@ -47,7 +49,7 @@ class student_old_lesson_list extends class_list_base {
             $table->data[$id][] = $this->get_cell_action_button($class);
             $table->data[$id][] = $this->get_cell_topic($class);
             $table->data[$id][] = $this->get_cell_notes($class);
-            $table->data[$id][] = $class->teacher_name;
+            $table->data[$id][] = $class->student_name;
             $table->data[$id][] = $this->get_cell_date($class);
         }
 
@@ -58,7 +60,7 @@ class student_old_lesson_list extends class_list_base {
         # todo
         $label = 'Edit';
         $action = null;
-        $url = 'views/view_student_edit_lesson.php';
+        $url = 'views/view_teacher_edit_lesson.php';
         $url_params = [
             'lesson_id' => $class->lesson_id
         ];

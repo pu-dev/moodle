@@ -25,7 +25,8 @@ abstract class tabs_base implements \renderable {
         return new \tabobject(
             $tab_id,
             $url,
-            get_string($label, 'schedule')
+            $label
+            // get_string($label, 'schedule')
         );
     }
 

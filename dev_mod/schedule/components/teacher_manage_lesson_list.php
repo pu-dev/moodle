@@ -1,12 +1,11 @@
 <?php namespace mod_schedule;
 defined('MOODLE_INTERNAL') || die();
 
-require_once(dirname(__FILE__).'/../../../config.php');
-require_once($CFG->dirroot.'/mod/schedule/debug.php');
-require_once($CFG->dirroot.'/mod/schedule/components/class_list_base.php');
+require_once(dirname(__FILE__).'/../inc.php');
+mod_require_once('/components/class_list_base.php');
 
 
-class teacher_class_list extends class_list_base {
+class teacher_manage_lesson_list extends class_list_base {
 
     /**
      *
@@ -54,7 +53,7 @@ class teacher_class_list extends class_list_base {
 
         foreach ($records as $id => $class) {
             # Todo
-            $student_name = "[ Free ]";
+            $student_name = "[ Free slot ]";
 
             if ( ! is_null($class->student_id) ) {
                 $student_name = $class->student_name;

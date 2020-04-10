@@ -1,9 +1,8 @@
 <?php namespace mod_schedule;
 defined('MOODLE_INTERNAL') || die();
 
-require_once(dirname(__FILE__).'/../../../config.php');
-require_once($CFG->dirroot.'/mod/schedule/debug.php');
-require_once($CFG->dirroot.'/mod/schedule/components/class_list_base.php');
+require_once(dirname(__FILE__).'/../inc.php');
+mod_require_once('/components/class_list_base.php');
 
 
 class student_book_class_list extends class_list_base {
@@ -22,7 +21,7 @@ class student_book_class_list extends class_list_base {
     protected function get_sql_query() {
         global $USER;
 
-        $epoch_time = time();
+        $time = time();
 
         $sql = $this->get_sql_query_base();
         $sql .= "
@@ -30,8 +29,8 @@ class student_book_class_list extends class_list_base {
                 (
                     student_user.id = {$USER->id} OR
                     student_user.id is null
-                ) AND
-                date > {$epoch_time}
+                ) 
+                AND date > {$time}
 
             ORDER BY 
                 lesson.date ASC,
