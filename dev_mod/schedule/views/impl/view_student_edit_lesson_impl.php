@@ -51,7 +51,7 @@ class view_student_edit_lesson_impl extends view_base_impl {
 
     private function redirect() {
         $url_base = '/views/view_student_old_lesson.php';
-        $url_params = array('id' => 48);
+        $url_params = array($this->cm->id);
         $url = tools::get_module_url($url_base, $url_params);
 
         return new view_result_redirect($url);
