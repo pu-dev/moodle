@@ -69,7 +69,7 @@ class view_teacher_availability_impl extends view_teacher_base_impl {
 
     private function action_class_cancel() {
         $class_id = required_param('class_id', PARAM_INT);
-        $action = new action_teacher_cancel_class($class_id);
+        $action = new action_teacher_cancel_class($this->cm, $class_id);
         $result = $action->execute();
         $hmlt = '';
 

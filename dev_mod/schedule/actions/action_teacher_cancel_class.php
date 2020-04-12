@@ -1,20 +1,16 @@
 <?php namespace mod_schedule;
 
-require_once(dirname(__FILE__).'/../../../config.php');
-require_once($CFG->dirroot.'/mod/schedule/debug.php');
-require_once($CFG->dirroot.'/mod/schedule/actions/action_base.php');
+require_once(dirname(__FILE__).'/../inc.php');
+mod_require_once('/actions/action_lesson_base.php');
+mod_require_once('/events/event_student_unbook_lesson.php');
 
 
-class action_teacher_cancel_class extends action_base {
+class action_teacher_cancel_class extends action_lesson_base {
     private $class_id;
 
 
-    public function __construct($class_id) {
-        debug(
-            'action_teacher_cancel_class: '.
-            "class_id: {$class_id}"
-        );
-
+    public function __construct($cm, $class_id) {
+        parent::__construct($cm);
         $this->class_id = $class_id;
     }
 
@@ -38,12 +34,24 @@ class action_teacher_cancel_class extends action_base {
             )
         );
 
-        // Return true if class has been removed from DB
+        if ( ! is_object($class) ) {
+            $this->update_calendar($this->class_id);
+        }
 
+        // Return true if class has been removed from DB
         return new action_result (
             ! is_object($class),
             $class
         );
     }
+
+    public function update_calendar($lesson_id) {
+        $lesson = new \stdClass;
+        $lesson->id = $lesson_id;
+
+        $event = new event_student_unbook_lesson($this->cm, $lesson);
+        $event->execute();
+    }
+
 }
 

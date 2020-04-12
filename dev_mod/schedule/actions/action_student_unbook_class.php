@@ -1,28 +1,31 @@
 <?php namespace mod_schedule;
 
-require_once(dirname(__FILE__).'/../../../config.php');
-require_once($CFG->dirroot.'/mod/schedule/debug.php');
-require_once($CFG->dirroot.'/mod/schedule/actions/action_base.php');
+require_once(dirname(__FILE__).'/../inc.php');
+mod_require_once('/actions/action_lesson_base.php');
+mod_require_once('/events/event_student_unbook_lesson.php');
 
 
-class action_student_unbook_class extends action_base {
+class action_student_unbook_class extends action_lesson_base {
     private $student_id;
     private $class_id;
 
 
-    public function __construct($class_id, $student_id) {
-        debug(
-            'action_student_unbook_class: '.
-            "student_id: {$student_id}, ".
-            "class_id: {$class_id}"
-        );
-
+    public function __construct($cm, $class_id, $student_id) {
+        parent::__construct($cm);
         $this->class_id = $class_id;
         $this->student_id = $student_id;
     }
 
 
     public function execute() {
+        $action_result = $this->update_db();
+        if ( $action_result->ok ) {
+            $this->update_calendar($action_result->data);
+        }
+        return $action_result;
+    }
+
+    private function update_db() {
         global $DB;
         $table_name = 'schedule_lesson';
 
@@ -50,6 +53,11 @@ class action_student_unbook_class extends action_base {
             is_object($class),
             $class
         );
+    }
+
+    public function update_calendar($lesson) {
+        $event = new event_student_unbook_lesson($this->cm, $lesson);
+        $event->execute();
     }
 }
 

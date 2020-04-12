@@ -7,6 +7,7 @@ mod_require_once('/views/view_result_base.php');
 
 
 abstract class view_base_impl {
+    protected $cm;
     protected $schedule;
 
     public function __construct() {

@@ -32,11 +32,9 @@ class view_student_book_lesson_impl extends view_student_base_impl {
         return \html_writer::table($class_list->get_class_table());
     }
 
-    private function process_action() {
-        $action = optional_param('action', self::ACTION_NONE, PARAM_INT);
-        debug('Action to process: {$action}');
-        
+    private function process_action() {        
         $html = '';
+        $action = optional_param('action', self::ACTION_NONE, PARAM_INT);
 
         switch ($action) {
             case self::ACTION_NONE:
@@ -62,7 +60,7 @@ class view_student_book_lesson_impl extends view_student_base_impl {
         global $OUTPUT;
 
         $class_id = required_param('class_id', PARAM_INT);
-        $action = new action_student_book_class($class_id, $USER->id);
+        $action = new action_student_book_class($this->cm, $class_id, $USER->id);
         $result = $action->execute();
         $html = '';
 
@@ -83,7 +81,7 @@ class view_student_book_lesson_impl extends view_student_base_impl {
         global $USER;
 
         $class_id = required_param('class_id', PARAM_INT);
-        $action = new action_student_unbook_class($class_id, $USER->id);
+        $action = new action_student_unbook_class($this->cm, $class_id, $USER->id);
         $result = $action->execute();
         $html = '';
 
