@@ -1,8 +1,7 @@
 <?php namespace mod_schedule;
 defined('MOODLE_INTERNAL') || die();
 
-require_once(dirname(__FILE__).'/../../../config.php');
-require_once($CFG->dirroot.'/mod/schedule/debug.php');
+require_once(dirname(__FILE__).'/../inc.php');
 
 
 abstract class form_handler_base {

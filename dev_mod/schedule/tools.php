@@ -1,8 +1,7 @@
 <?php namespace mod_schedule;
 defined('MOODLE_INTERNAL') || die();
 
-require_once(dirname(__FILE__).'/../../config.php');
-require_once($CFG->dirroot.'/mod/schedule/debug.php');
+require_once(dirname(__FILE__).'/inc.php');
 
 
 class tools {
@@ -99,7 +98,6 @@ class tools {
     }
 
     public static function get_epoch_date($date, $hour, $minute) {
-        debug('get epoch '." date:{$date}  h:{$hour}. m:{$minute}");
         $epoch_date = (
             $date +
             $hour * self::MINUTES_IN_HOUR * self::SECONDS_IN_MINUTE +

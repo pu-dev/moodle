@@ -129,7 +129,6 @@ abstract class form_base extends \moodleform {
         $days_selector) 
     {
         $days = $data[$days_selector];
-        debug('daus:'.$days.is_null($days));
         if ( is_null($days) ) {
             $errors[$days_selector] = 'Select at least one week day';
         }

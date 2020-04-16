@@ -1,13 +1,12 @@
 <?php namespace mod_schedule;
 defined('MOODLE_INTERNAL') || die(__FILE__);
 
-require_once(dirname(__FILE__).'/../../../../config.php');
-require_once($CFG->dirroot.'/mod/schedule/debug.php');
-require_once($CFG->dirroot.'/mod/schedule/tools.php');
-require_once($CFG->dirroot.'/mod/schedule/views/impl/view_student_base_impl.php');
-require_once($CFG->dirroot.'/mod/schedule/components/student_book_class_list.php');
-require_once($CFG->dirroot.'/mod/schedule/actions/action_student_book_class.php');
-require_once($CFG->dirroot.'/mod/schedule/actions/action_student_unbook_class.php');
+require_once(dirname(__FILE__).'/../../inc.php');
+mod_require_once('/tools.php');
+mod_require_once('/views/impl/view_student_base_impl.php');
+mod_require_once('/components/student_book_class_list.php');
+mod_require_once('/actions/action_student_book_class.php');
+mod_require_once('/actions/action_student_unbook_class.php');
 
 
 class view_student_book_lesson_impl extends view_student_base_impl {

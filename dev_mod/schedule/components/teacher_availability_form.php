@@ -7,7 +7,7 @@ mod_require_once('/components/form_base.php');
 
 class teacher_availability_form extends form_base {
     public function definition() {
-        $this->create_header('Add session', 'header_single_class');
+        $this->create_header('Add single session', 'header_single_class');
         $this->create_time_selector('class_time');
         $this->create_date_selector();
         $this->create_save_button();

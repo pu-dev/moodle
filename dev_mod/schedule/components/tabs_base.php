@@ -1,9 +1,8 @@
 <?php namespace mod_schedule;
 defined('MOODLE_INTERNAL') || die();
 
-require_once(dirname(__FILE__).'/../../../config.php');
-require_once($CFG->dirroot.'/mod/schedule/tools.php');
-require_once($CFG->dirroot.'/mod/schedule/debug.php');
+require_once(dirname(__FILE__).'/../inc.php');
+mod_require_once('/tools.php');
 
 
 abstract class tabs_base implements \renderable {

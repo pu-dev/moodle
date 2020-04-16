@@ -8,7 +8,7 @@ mod_require_once('/components/form_base.php');
 class teacher_multi_availability_form extends form_base {
 
     public function definition() {
-        $this->create_header('Multiple sessions', 'header_multi_class');
+        $this->create_header('Add multiple sessions', 'header_multi_class');
         $this->create_week_days('sdays');
         $this->create_time_selector('class_time');
         $this->create_date_selector();
