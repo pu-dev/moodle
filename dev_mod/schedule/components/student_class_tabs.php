@@ -34,7 +34,7 @@ class student_class_tabs extends tabs_base implements \renderable {
         $tabs[] = $this->create_tab(
             self::TAB_OLD_LESSON,
             "views/view_student_old_lesson.php",
-            "Old classes"
+            "Passed classes"
         );
 
         return array($tabs);

@@ -1,9 +1,9 @@
 <?php namespace mod_schedule;
 defined('MOODLE_INTERNAL') || die();
 
-require_once(dirname(__FILE__).'/../../../config.php');
-require_once($CFG->dirroot.'/mod/schedule/debug.php');
-require_once($CFG->dirroot.'/mod/schedule/components/form_handler_base.php');
+require_once(dirname(__FILE__).'/../inc.php');
+mod_require_once('/tools.php');
+mod_require_once('/components/form_handler_base.php');
 
 
 class teacher_availability_form_handler extends form_handler_base {
@@ -12,14 +12,11 @@ class teacher_availability_form_handler extends form_handler_base {
     }
 
 
-    protected function save_form() {
+    protected function saved() {
         global $DB, $USER;
-
-        define("MINUTES_IN_HOUR", 60);
-        define("SECONDS_IN_MINUTE", 60);
+        parent::saved();
 
         $form_data = $this->form->get_data();
-
 
         // Get time
         $cls_time = $form_data->class_time;
@@ -30,21 +27,24 @@ class teacher_availability_form_handler extends form_handler_base {
         $end_minute = $cls_time['end_minute'];
 
         // Duration in seconds
-        $duration = (
-            ($end_hour - $start_hour) * MINUTES_IN_HOUR +
-            ($end_minute - $start_minute)
+        $duration = tools::get_duration(
+            $start_hour, 
+            $start_minute,
+            $end_hour, 
+            $end_minute
         );
-        $duration *= SECONDS_IN_MINUTE;
 
         // Get date
-        $epoch_date = $form_data->class_date;
-        $epoch_date += (
-            $start_hour * MINUTES_IN_HOUR * SECONDS_IN_MINUTE +
-            $start_minute * SECONDS_IN_MINUTE
+        $epoch_date = tools::get_epoch_date(
+            $form_data->class_date,
+            $start_hour,
+            $start_minute
         );
 
         // Create 'class' representation
         $class = new \stdClass;
+
+        # FIXME
         $class->schedule_id = 1; # TODO
         $class->teacher_id = $USER->id;
         $class->student_id = null;
@@ -54,20 +54,11 @@ class teacher_availability_form_handler extends form_handler_base {
         $class->id = $DB->insert_record('schedule_lesson', $class);
 
         debug("Teachers availability saved");
-        // Than display
-        // $this->form->display();
     }
 
-
-    protected function cancel_form() {
-        // log_debug("cancel form");
+    protected function canceled() {
     }
 
-
-    protected function validate_form() {
-        // Check if to time is after from time
-        // log_debug("validate_form");
-        // $this->form->display();
-        // $this->_mform->test(3);
+    protected function validated() {
     }
 }

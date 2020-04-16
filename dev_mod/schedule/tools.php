@@ -6,6 +6,9 @@ require_once($CFG->dirroot.'/mod/schedule/debug.php');
 
 
 class tools {
+    const MINUTES_IN_HOUR = 60;
+    const SECONDS_IN_MINUTE = 60;
+
     public static function get_self_url($url_params=null) {
         $src_url = $_SERVER['PHP_SELF'];
 
@@ -83,5 +86,27 @@ class tools {
         return strlen($in) > $len ? substr($in, 0, $len)."..." : $in;
     }
 
-    
+
+
+    public static function get_duration($start_hour, $start_minute, $end_hour, $end_minute) {
+        $duration = (
+            ($end_hour - $start_hour) * self::MINUTES_IN_HOUR +
+            ($end_minute - $start_minute)
+        );
+        $duration *= self::SECONDS_IN_MINUTE;
+
+        return $duration;
+    }
+
+    public static function get_epoch_date($date, $hour, $minute) {
+        debug('get epoch '." date:{$date}  h:{$hour}. m:{$minute}");
+        $epoch_date = (
+            $date +
+            $hour * self::MINUTES_IN_HOUR * self::SECONDS_IN_MINUTE +
+            $minute * self::SECONDS_IN_MINUTE
+        );
+
+        return $epoch_date;
+    }
+     
 }

@@ -6,6 +6,8 @@ mod_require_once('/tools.php');
 mod_require_once('/views/impl/view_teacher_base_impl.php');
 mod_require_once('/components/teacher_availability_form.php');
 mod_require_once('/components/teacher_availability_form_handler.php');
+mod_require_once('/components/teacher_multi_availability_form.php');
+mod_require_once('/components/teacher_multi_availability_form_handler.php');
 mod_require_once('/components/teacher_manage_lesson_list.php');
 mod_require_once('/actions/action_teacher_cancel_class.php');
 
@@ -19,30 +21,85 @@ class view_teacher_availability_impl extends view_teacher_base_impl {
     }
 
     protected function render() {
+        $single_form_ret = $this->render_single_date_form();
+        $mutli_form_ret = $this->render_multi_date_form();
+
         $html = parent::render();
         $html .= $this->process_action();
-        $html .= $this->render_teacher_form();
-        $html .= $this->render_teacher_lesson_list();
+        $html .= $single_form_ret['msg'];
+        $html .= $mutli_form_ret['msg'];
+        $html .= $single_form_ret['form'];
+        $html .= $mutli_form_ret['form'];
+        $html .= $this->render_lesson_list();
         return new view_result_html($html);
     }
 
-    private function render_teacher_form() {
-        $form_params = array('id' => $this->cm->id);
-        $url_params = $form_params;
-
-        $url = tools::get_self_url($url_params);
-        
-        debug("Teache availability form target url: {$url}");
-
-        $teacher_form = new teacher_availability_form($url, $form_params);
-        $teacher_form_handler = new teacher_availability_form_handler($teacher_form);
-
-        $teacher_form_handler->process_form();
-        return $teacher_form->render();
+    private function render_single_date_form() {
+        $msgs = array(
+            form_handler_base::FORM_SAVED => 'Single session has been saved'
+        );
+        return $this->render_form(
+            'teacher_availability_form',
+            'teacher_availability_form_handler',
+            $msgs
+        );
     }
 
+    private function render_multi_date_form() {
+        $msgs = array(
+            form_handler_base::FORM_SAVED => 'Multi sessions have been saved'
+        );
+        return $this->render_form(
+            'teacher_multi_availability_form',
+            'teacher_multi_availability_form_handler',
+            $msgs
+        );
+    }
 
-    private function render_teacher_lesson_list() {
+    private function render_form(
+        $class_form_name,
+        $class_handler_name,
+        $msgs) 
+    {
+        $form_params = array('id' => $this->cm->id);
+        $url_params = $form_params;
+        $url = tools::get_self_url($url_params);
+        
+        $class_form_name = '\\mod_schedule\\'.$class_form_name;
+        $class_handler_name = '\\mod_schedule\\'.$class_handler_name;
+        $form = new $class_form_name($url, $form_params);
+        $form_handler = new $class_handler_name($form);
+
+        $form_result = $form_handler->process_form();
+        $form_msg = $this->render_form_message($form_result, $msgs);
+
+        return array(
+            'form' => $form->render(),
+            'msg' => $form_msg
+        );
+    }
+
+    private function render_form_message($form_result, $msgs) {
+        $html = '';
+        
+        switch ($form_result) {
+            case form_handler_base::FORM_SAVED:
+                $html = $this->alert_success($msgs[$form_result]);                
+                break;
+
+            case form_handler_base::FORM_DISPLAYED:
+                // $html = $this->alert_success("display");
+                break;
+            
+            default:
+                // $html = $this->alert_success("default");
+                break;
+        }
+
+        return $html;               
+    }
+
+    private function render_lesson_list() {
         $class_list = new teacher_manage_lesson_list($this->cm);
         return \html_writer::table($class_list->get_class_table());
     }
@@ -74,10 +131,12 @@ class view_teacher_availability_impl extends view_teacher_base_impl {
         $hmlt = '';
 
         if ($result->ok) {
+            #todo 
             $msg = get_string('class_canceled_ok', 'schedule');
             $html = $this->alert_success($msg);
         }
         else {
+            #todo
             $msg = get_string('class_canceled_failed', 'schedule');
             $html = $this->alert_success($msg);
         }

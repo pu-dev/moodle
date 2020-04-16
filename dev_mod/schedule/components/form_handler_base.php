@@ -19,17 +19,17 @@ abstract class form_handler_base {
     public function process_form() {
         if ($this->form->is_cancelled()) {
             debug("Form canceled");
-            $this->cancel_form();
+            $this->canceled();
             return self::FORM_CANCELED;
         } 
         else if ($this->form->get_data()) {
             debug("Form saved");
-            $this->save_form();
+            $this->saved();
             return self::FORM_SAVED;
         } 
         else {
             debug("Form displayed");
-            $this->validate_form(); // Should it be here
+            $this->validated(); // Should it be here?
             // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
             // or on the first display of the form.
             //Set default data (if any)
@@ -38,9 +38,11 @@ abstract class form_handler_base {
         }
     }
 
-    abstract protected function save_form();
+    protected function saved() {
+        $this->form->set_expanded(false);
+    }
 
-    abstract protected function cancel_form();
+    abstract protected function canceled();
     
-    abstract protected function validate_form();
+    abstract protected function validated();
 }

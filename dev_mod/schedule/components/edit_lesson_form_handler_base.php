@@ -13,7 +13,7 @@ abstract class edit_lesson_form_handler_base extends form_handler_base {
         parent::__construct($form);
     }
 
-    protected function save_form() {
+    protected function saved() {
         global $DB;
 
         $form_data = $this->form->get_data();
@@ -26,9 +26,9 @@ abstract class edit_lesson_form_handler_base extends form_handler_base {
         $action->execute();
     }
 
-    protected function cancel_form() {
+    protected function canceled() {
     }
 
-    protected function validate_form() {
+    protected function validated() {
     }
 }

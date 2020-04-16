@@ -36,7 +36,7 @@ class teacher_class_tabs extends tabs_base implements \renderable {
             self::TAB_OLD_LESSON,
             "views/view_teacher_old_lesson.php",
             # Todo
-            "Old classes"
+            "Passed classes"
         );
         return array($tabs);
     }
