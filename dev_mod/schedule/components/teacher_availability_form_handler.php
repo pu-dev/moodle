@@ -7,8 +7,8 @@ mod_require_once('/components/form_handler_base.php');
 
 
 class teacher_availability_form_handler extends form_handler_base {
-    public function __construct($form) {
-        parent::__construct($form);
+    public function __construct($form, $cm) {
+        parent::__construct($form, $cm);
     }
 
 
@@ -43,9 +43,7 @@ class teacher_availability_form_handler extends form_handler_base {
 
         // Create 'class' representation
         $class = new \stdClass;
-
-        # FIXME
-        $class->schedule_id = 1; # TODO
+        $class->cm_id = $this->cm->id;
         $class->teacher_id = $USER->id;
         $class->student_id = null;
         $class->date = $epoch_date;

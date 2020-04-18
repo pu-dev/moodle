@@ -10,9 +10,11 @@ abstract class form_handler_base {
     public const FORM_CANCELED = 3;
 
     protected $form;
+    protected $cm;
 
-    public function __construct($form) {
+    public function __construct($form, $cm) {
         $this->form = $form;
+        $this->cm = $cm;
     }
 
     public function process_form() {

@@ -31,6 +31,7 @@ class student_book_class_list extends class_list_base {
                     student_user.id is null
                 ) 
                 AND date > {$time}
+                AND cm_id = {$this->cm->id}
 
             ORDER BY 
                 lesson.date ASC,

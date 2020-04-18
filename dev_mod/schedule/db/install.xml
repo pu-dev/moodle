@@ -21,7 +21,7 @@
     <TABLE NAME="schedule_lesson" COMMENT="Lessons are stored here">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-        <FIELD NAME="schedule_id" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="cm_id" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="teacher_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
         <FIELD NAME="student_id" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="date" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
@@ -31,7 +31,7 @@
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-        <KEY NAME="schedule_id" TYPE="foreign" FIELDS="schedule_id" REFTABLE="schedule" REFFIELDS="id"/>
+        <KEY NAME="cm_id" TYPE="foreign" FIELDS="cm_id" REFTABLE="course_modules" REFFIELDS="module"/>
       </KEYS>
     </TABLE>
   

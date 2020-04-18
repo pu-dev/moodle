@@ -6,8 +6,8 @@ mod_require_once('/components/form_handler_base.php');
 
 
 class teacher_multi_availability_form_handler extends form_handler_base {
-    public function __construct($form) {
-        parent::__construct($form);
+    public function __construct($form, $cm) {
+        parent::__construct($form, $cm);
     }
 
     protected function saved() {
@@ -47,8 +47,7 @@ class teacher_multi_availability_form_handler extends form_handler_base {
             
             if ( array_key_exists($day_no, $days_selected) ) {
                 $class = new \stdClass;
-                # FIXME 
-                $class->schedule_id = 1;
+                $class->cm_id = $this->cm->id;
                 $class->teacher_id = $USER->id;
                 $class->student_id = null;
                 $class->date = tools::get_epoch_date($date, $start_hour, $start_minute);

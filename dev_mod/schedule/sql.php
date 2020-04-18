@@ -17,6 +17,8 @@ class sql {
                 lesson.student_id as student_id,
                 student_user.username as student_name,
                 
+                lesson.cm_id as cm_id,
+
                 lesson.date,
                 lesson.duration,
                 (lesson.date + lesson.duration) as end_date,

@@ -68,7 +68,7 @@ class view_teacher_availability_impl extends view_teacher_base_impl {
         $class_form_name = '\\mod_schedule\\'.$class_form_name;
         $class_handler_name = '\\mod_schedule\\'.$class_handler_name;
         $form = new $class_form_name($url, $form_params);
-        $form_handler = new $class_handler_name($form);
+        $form_handler = new $class_handler_name($form, $this->cm);
 
         $form_result = $form_handler->process_form();
         $form_msg = $this->render_form_message($form_result, $msgs);

@@ -48,7 +48,7 @@ abstract class view_edit_lesson_base_impl extends view_base_impl {
 
 
     private function process_lesson_form($form) {
-        $form_handler = new $this->form_handler($form);
+        $form_handler = new $this->form_handler($form, $this->cm);
         $form_status = $form_handler->process_form();
         
         if ($form_status == form_handler_base::FORM_DISPLAYED) {

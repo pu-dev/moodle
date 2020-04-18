@@ -9,8 +9,8 @@ mod_require_once('/actions/action_update_lesson.php');
 
 abstract class edit_lesson_form_handler_base extends form_handler_base {
     
-    public function __construct($form) {
-        parent::__construct($form);
+    public function __construct($form, $cm) {
+        parent::__construct($form, $cm);
     }
 
     protected function saved() {

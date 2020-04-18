@@ -19,8 +19,9 @@ class student_old_lesson_list extends class_list_base {
         $sql = $this->get_sql_query_base();
         $sql .= "
             WHERE
-                student_user.id = {$USER->id} AND
-                (lesson.date + lesson.duration) < {$time}
+                student_user.id = {$USER->id} 
+                AND (lesson.date + lesson.duration) < {$time}
+                AND cm_id = {$this->cm->id}
 
             ORDER BY 
                 lesson.date ASC,

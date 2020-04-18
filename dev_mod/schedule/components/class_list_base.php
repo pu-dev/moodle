@@ -55,20 +55,27 @@ abstract class class_list_base implements \renderable {
 
 
     final protected function get_cell_topic($class) {
-        if ( ! isset($class->topic) ) {
-            # todo
-            return "[ blank ]";
-        }
-        return nl2br($class->topic);
+        return $this->__get_txt_cell($class->topic);
     }
 
 
     final protected function get_cell_notes($class) {
-        if ( ! isset($class->notes) ) {
-            # todo 
-            return "[ blank ]";
+        return $this->__get_txt_cell($class->notes);
+    }
+
+    final private function __get_txt_cell($txt) {
+        # todo 
+        $blank_msg = "[ blank ]";
+
+        if ( ! isset($txt) ) {
+            return $blank_msg;
         }
-        return nl2br($class->notes);
+
+        if ( strlen($txt) == 0 ) {
+            return $blank_msg;
+        }
+
+        return nl2br($txt);
     }
 
 
