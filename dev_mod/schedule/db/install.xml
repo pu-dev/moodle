@@ -12,6 +12,9 @@
         <FIELD NAME="intro" TYPE="text" NOTNULL="true" SEQUENCE="false"/>
         <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+
+        <FIELD NAME="lesson_limit_period" TYPE="char" LENGTH="32" NOTNULL="true" DEFAULT="month" SEQUENCE="false" COMMENT="Period of time for which lesson limit should be imposed. Available values: week, fortnite, month"/>
+        <FIELD NAME="lesson_limit_value" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Lesson limit count. 0 - means unlimited"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

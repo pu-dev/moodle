@@ -83,6 +83,20 @@ function schedule_extend_settings_navigation(settings_navigation $settings, navi
 }
 
 
+
+function __get_schedule_db_record($schedule) {
+    $schedule_fixed = new stdClass;
+    $schedule_fixed->course = $schedule->course;
+    $schedule_fixed->name = $schedule->name;
+    $schedule_fixed->intro = '';
+    $schedule_fixed->introformat = 1;
+    $schedule_fixed->timemodified = time();
+
+    $schedule_fixed->lesson_limit_value = $schedule->lesson_limit_value;
+    $schedule_fixed->lesson_limit_period = $schedule->lesson_limit_period;
+
+    return $schedule_fixed;
+}
 /**
  *
  * Add 'Schedule' activity to course.
@@ -90,43 +104,50 @@ function schedule_extend_settings_navigation(settings_navigation $settings, navi
  */
 
 function schedule_add_instance($schedule) {
-    global $DB, $CFG;
-    require_once($CFG->dirroot.'/mod/schedule/locallib.php');
+    global $DB;
 
-    // foreach ($schedule as $key => $value) {
-    // error_log("---- schedule {$key} => {$value} ");
-    // }
-    
-    $schedule_fixed = new stdClass;
-
-    $schedule_fixed->course = $schedule->course;
-    $schedule_fixed->name = $schedule->name;
-    $schedule_fixed->intro = '';
-    $schedule_fixed->introformat = 1;
-    $schedule_fixed->timemodified = time();
-
-    $schedule_fixed->id = $DB->insert_record("schedule", $schedule_fixed);
-
-    // Add calendar events if necessary.
-    // schedule_set_events($schedule);
-    // if (!empty($schedule->completionexpected)) {
-    //     \core_completion\api::update_completion_date_event($schedule->coursemodule, 'schedule', $schedule->id,
-    //             $schedule->completionexpected);
-    // }
+    $schedule_fixed = __get_schedule_db_record($schedule);
+    $schedule_fixed->id = $DB->insert_record(
+        "schedule", 
+        $schedule_fixed);
 
     return $schedule_fixed->id;
 }
 
 
-function schedule_get_schedule($schedule_id) {
+
+/**
+ * Given an object containing all the necessary data,
+ * (defined by the form in mod_form.php) this function
+ * will update an existing instance with new data.
+ *
+ * @global object
+ * @param object $schedule
+ * @return bool
+ */
+function schedule_update_instance($schedule) {
     global $DB;
 
-    if ($schedule = $DB->get_record("schedule", array("id" => $schedule_id))) {
-        // if ($options = $DB->get_records("schedule_options", array("scheduleid" => $scheduleid), "id")) {
-        //     foreach ($options as $option) {
-        //         $schedule->option[$option->id] = $option->text;
-        //         $schedule->maxanswers[$option->id] = $option->maxanswers;
-        //     }
+    $schedule_fixed = __get_schedule_db_record($schedule);
+    $schedule_fixed->id = $schedule->instance;
+    return $DB->update_record(
+        "schedule",
+        $schedule_fixed);
+}
+
+
+
+
+
+
+
+
+
+function schedule_get_schedule($schedule_id) {
+    global $DB;
+    
+    $schedule = $DB->get_record("schedule", array("id" => $schedule_id));
+    if ( $schedule ) {
         return $schedule;
     }
     return false;
@@ -203,48 +224,48 @@ function schedule_user_complete($course, $user, $mod, $schedule) {
  * @param object $schedule
  * @return bool
  */
-function schedule_update_instance($schedule) {
-    global $DB, $CFG;
-    require_once($CFG->dirroot.'/mod/schedule/locallib.php');
+// function schedule_update_instance($schedule) {
+//     global $DB, $CFG;
+//     require_once($CFG->dirroot.'/mod/schedule/locallib.php');
 
-    $schedule->id = $schedule->instance;
-    $schedule->timemodified = time();
+//     $schedule->id = $schedule->instance;
+//     $schedule->timemodified = time();
 
-    //update, delete or insert answers
-    foreach ($schedule->option as $key => $value) {
-        $value = trim($value);
-        $option = new stdClass();
-        $option->text = $value;
-        $option->scheduleid = $schedule->id;
-        if (isset($schedule->limit[$key])) {
-            $option->maxanswers = $schedule->limit[$key];
-        }
-        $option->timemodified = time();
-        if (isset($schedule->optionid[$key]) && !empty($schedule->optionid[$key])){//existing schedule record
-            $option->id=$schedule->optionid[$key];
-            if (isset($value) && $value <> '') {
-                $DB->update_record("schedule_options", $option);
-            } else {
-                // Remove the empty (unused) option.
-                $DB->delete_records("schedule_options", array("id" => $option->id));
-                // Delete any answers associated with this option.
-                $DB->delete_records("schedule_answers", array("scheduleid" => $schedule->id, "optionid" => $option->id));
-            }
-        } else {
-            if (isset($value) && $value <> '') {
-                $DB->insert_record("schedule_options", $option);
-            }
-        }
-    }
+//     //update, delete or insert answers
+//     foreach ($schedule->option as $key => $value) {
+//         $value = trim($value);
+//         $option = new stdClass();
+//         $option->text = $value;
+//         $option->scheduleid = $schedule->id;
+//         if (isset($schedule->limit[$key])) {
+//             $option->maxanswers = $schedule->limit[$key];
+//         }
+//         $option->timemodified = time();
+//         if (isset($schedule->optionid[$key]) && !empty($schedule->optionid[$key])){//existing schedule record
+//             $option->id=$schedule->optionid[$key];
+//             if (isset($value) && $value <> '') {
+//                 $DB->update_record("schedule_options", $option);
+//             } else {
+//                 // Remove the empty (unused) option.
+//                 $DB->delete_records("schedule_options", array("id" => $option->id));
+//                 // Delete any answers associated with this option.
+//                 $DB->delete_records("schedule_answers", array("scheduleid" => $schedule->id, "optionid" => $option->id));
+//             }
+//         } else {
+//             if (isset($value) && $value <> '') {
+//                 $DB->insert_record("schedule_options", $option);
+//             }
+//         }
+//     }
 
-    // Add calendar events if necessary.
-    // schedule_set_events($schedule);
-    $completionexpected = (!empty($schedule->completionexpected)) ? $schedule->completionexpected : null;
-    \core_completion\api::update_completion_date_event($schedule->coursemodule, 'schedule', $schedule->id, $completionexpected);
+//     // Add calendar events if necessary.
+//     // schedule_set_events($schedule);
+//     $completionexpected = (!empty($schedule->completionexpected)) ? $schedule->completionexpected : null;
+//     \core_completion\api::update_completion_date_event($schedule->coursemodule, 'schedule', $schedule->id, $completionexpected);
 
-    return $DB->update_record('schedule', $schedule);
+//     return $DB->update_record('schedule', $schedule);
 
-}
+// }
 
 /**
  * @global object
@@ -1427,3 +1448,14 @@ function mod_schedule_get_completion_active_rule_descriptions($cm) {
     }
     return $descriptions;
 }
+
+
+
+
+
+define('VIEW_ALL', 1);
+define('VIEW_MONTH', 2);
+define('VIEW_WEEK', 3);
+
+
+//-------------------
