@@ -13,6 +13,9 @@ function debug($msg) {
 function my_log($log_msg)
 {
     global $USER;
+    if (is_null($log_msg) || isset($log_msg)) {
+        $log_msg = 'EMPTY MSG';
+    }
     $time_stamp = date('Y-M-d H:i:s');
     $log_msg = "[{$time_stamp} {$USER->username}] {$log_msg}";
     $log_filename = "/var/log/moodle_plugin.log";

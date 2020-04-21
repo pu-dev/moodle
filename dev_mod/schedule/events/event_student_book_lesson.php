@@ -45,7 +45,10 @@ class event_student_book_lesson extends event_lesson_base {
         $event->description = format_module_intro(
             'schedule', $schedule, $this->cm->id
         );
-        $event->courseid = 0; //$schedule->course;
+        // Event shown on main page calendar
+        $event->courseid = 0; 
+        // Event shown only on course calendar 
+        // $event->courseid = $schedule->course; 
         $event->groupid = 0;
         $event->userid = $target_user_id;
         $event->modulename = 'schedule';

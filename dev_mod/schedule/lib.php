@@ -1,6 +1,5 @@
 <?php
 
-
 defined('MOODLE_INTERNAL') || die();
 
 /** @global int $SCHEDULE_COLUMN_HEIGHT */
@@ -239,7 +238,7 @@ function schedule_update_instance($schedule) {
     }
 
     // Add calendar events if necessary.
-    schedule_set_events($schedule);
+    // schedule_set_events($schedule);
     $completionexpected = (!empty($schedule->completionexpected)) ? $schedule->completionexpected : null;
     \core_completion\api::update_completion_date_event($schedule->coursemodule, 'schedule', $schedule->id, $completionexpected);
 
@@ -1121,7 +1120,7 @@ function schedule_refresh_events($courseid = 0, $instance = null, $cm = null) {
         if (!is_object($instance)) {
             $instance = $DB->get_record('schedule', array('id' => $instance), '*', MUST_EXIST);
         }
-        schedule_set_events($instance);
+        // schedule_set_events($instance);
         return true;
     }
 
@@ -1136,7 +1135,7 @@ function schedule_refresh_events($courseid = 0, $instance = null, $cm = null) {
     }
 
     foreach ($schedules as $schedule) {
-        schedule_set_events($schedule);
+        // schedule_set_events($schedule);
     }
     return true;
 }

@@ -1,9 +1,9 @@
 <?php namespace mod_schedule;
 defined('MOODLE_INTERNAL') || die();
 
-require_once(dirname(__FILE__).'/../../../../config.php');
-require_once($CFG->dirroot.'/mod/schedule/views/impl/view_base_impl.php');
-require_once($CFG->dirroot.'/mod/schedule/components/teacher_class_tabs.php');
+require_once(dirname(__FILE__).'/../../inc.php');
+mod_require_once('/views/impl/view_base_impl.php');
+mod_require_once('/components/teacher_class_tabs.php');
 
 
 abstract class view_teacher_base_impl extends view_base_impl {
