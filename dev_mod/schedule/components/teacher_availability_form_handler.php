@@ -11,7 +11,6 @@ class teacher_availability_form_handler extends form_handler_base {
         parent::__construct($form, $cm);
     }
 
-
     protected function saved() {
         global $DB, $USER;
         parent::saved();
@@ -43,7 +42,7 @@ class teacher_availability_form_handler extends form_handler_base {
 
         // Create 'class' representation
         $class = new \stdClass;
-        $class->cm_id = $this->cm->id;
+        $class->schedule_id = $this->cm->instance;
         $class->teacher_id = $USER->id;
         $class->student_id = null;
         $class->date = $epoch_date;

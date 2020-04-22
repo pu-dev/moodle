@@ -21,7 +21,7 @@ class student_new_lesson_list extends class_list_base {
             WHERE
                 student_user.id = {$USER->id} 
                 AND (lesson.date + lesson.duration) > {$time}
-                AND cm_id = {$this->cm->id}
+                AND schedule_id = {$this->cm->instance}
 
             ORDER BY 
                 lesson.date ASC,

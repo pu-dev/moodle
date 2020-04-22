@@ -16,7 +16,6 @@ class action_update_lesson extends action_base {
         $this->notes = $notes;
     }
 
-
     public function execute() {
         global $DB;
         $table_name = 'schedule_lesson';

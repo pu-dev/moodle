@@ -10,16 +10,17 @@ class action_student_unbook_class extends action_lesson_base {
     private $class_id;
 
 
-    public function __construct($cm, $class_id, $student_id) {
+    public function __construct($cm, $class_id) {
+        global $USER;
         parent::__construct($cm);
         $this->class_id = $class_id;
-        $this->student_id = $student_id;
+        $this->student_id = $USER->id;
     }
 
 
     public function execute() {
         $action_result = $this->update_db();
-        if ( $action_result->ok ) {
+        if ( $action_result->status ) {
             $this->update_calendar($action_result->data);
         }
         return $action_result;

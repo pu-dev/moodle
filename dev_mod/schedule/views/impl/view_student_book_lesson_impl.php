@@ -59,18 +59,36 @@ class view_student_book_lesson_impl extends view_student_base_impl {
         global $OUTPUT;
 
         $class_id = required_param('class_id', PARAM_INT);
-        $action = new action_student_book_class($this->cm, $class_id, $USER->id);
+        $action = new action_student_book_class(
+            $this->cm,
+            $class_id,
+            $this->schedule);
         $result = $action->execute();
         $html = '';
 
-        if ($result->ok) {
-            $class_date = tools::epoch_to_date($result->data->date);
-            $msg = get_string('class_booked_ok', 'schedule', $class_date);
-            $html = $this->alert_success($msg);
-        }
-        else {
-            $msg = get_string('class_booked_failed', 'schedule');
-            $html = $this->alert_error($msg);
+        switch ($result->status) {
+            case action_student_book_class::RESULT_OK:
+                $class_date = tools::epoch_to_date($result->data->date);
+                $msg = get_string('class_booked_ok', 'schedule', $class_date);
+                $html = $this->alert_success($msg);
+                break;
+
+            case action_student_book_class::RESULT_CLASS_UNAVAILABLE:
+                $msg = get_string('class_booked_failed', 'schedule');
+                $html = $this->alert_error($msg);
+                break;
+
+            case action_student_book_class::RESULT_BOOKED_CLASS_LIMIT:
+                $limit_period = strtolower($this->schedule->lesson_limit_period);
+                $limit_value = $this->schedule->lesson_limit_value;
+
+                $msg = "Only {$limit_value} class(es) a {$limit_period} can be booked.";
+                $html = $this->alert_error($msg);
+                break;
+            
+            default:
+                error_log('action_book_class: unknown status retured {$result->status}');
+                break;
         }
 
         return $html;
@@ -84,14 +102,14 @@ class view_student_book_lesson_impl extends view_student_base_impl {
         $result = $action->execute();
         $html = '';
 
-        if ($result->ok) {
+        if ($result->status) {
             $class_date = tools::epoch_to_date($result->data->date);
             $msg = get_string('class_unbooked_ok', 'schedule', $class_date);
             $html = $this->alert_success($msg);
         }
         else {
             $msg = get_string('class_unbooked_failed', 'schedule');
-            $html = $this->alert_success($msg);
+            $html = $this->alert_error($msg);
         }
 
         return $html;

@@ -55,7 +55,7 @@ class mod_schedule_mod_form extends moodleform_mod {
             'Time period', 
             array(
                 'month' => 'month',
-                'fortnight' => 'fortnight',
+                // 'fortnight' => 'fortnight',
                 'week' => 'week'
             )
         );

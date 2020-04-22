@@ -9,11 +9,11 @@ abstract class action_base {
 
 
 class action_result {
-    public $ok;
+    public $status;
     public $data;
 
-    public function __construct($ok, $data=null) {
-        $this->ok = $ok;
+    public function __construct($status, $data=null) {
+        $this->status = $status;
         $this->data = $data;
     }
 }

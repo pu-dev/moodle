@@ -17,7 +17,7 @@ class sql {
                 lesson.student_id as student_id,
                 student_user.username as student_name,
                 
-                lesson.cm_id as cm_id,
+                lesson.schedule_id as schedule_id,
 
                 lesson.date,
                 lesson.duration,
@@ -33,5 +33,20 @@ class sql {
             LEFT JOIN {user} as student_user
                 ON lesson.student_id=student_user.id
         ";
+    }
+
+    public static function get_user_lesson_count(
+        $user, $schedule_id, $start_date, $stop_date) {
+        global $DB;
+
+        $table = 'schedule_lesson';
+        $where = "
+            student_id = {$user->id}
+            AND schedule_id = {$schedule_id}
+            AND date >= {$start_date}
+            AND date < {$stop_date}
+        ";
+
+        return $DB->count_records_select($table, $where);
     }
 }

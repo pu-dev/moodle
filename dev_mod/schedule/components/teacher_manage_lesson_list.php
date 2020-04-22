@@ -25,7 +25,7 @@ class teacher_manage_lesson_list extends class_list_base {
         $sql .= "
             WHERE
                 teacher_id = {$USER->id}
-                AND cm_id = {$this->cm->id}
+                AND schedule_id = {$this->cm->instance}
 
             ORDER BY 
                 lesson.date ASC

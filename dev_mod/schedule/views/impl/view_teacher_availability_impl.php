@@ -130,7 +130,7 @@ class view_teacher_availability_impl extends view_teacher_base_impl {
         $result = $action->execute();
         $hmlt = '';
 
-        if ($result->ok) {
+        if ($result->status) {
             #todo 
             $msg = get_string('class_canceled_ok', 'schedule');
             $html = $this->alert_success($msg);

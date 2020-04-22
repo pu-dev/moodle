@@ -47,7 +47,7 @@ class teacher_multi_availability_form_handler extends form_handler_base {
             
             if ( array_key_exists($day_no, $days_selected) ) {
                 $class = new \stdClass;
-                $class->cm_id = $this->cm->id;
+                $class->schedule_id = $this->cm->instance;
                 $class->teacher_id = $USER->id;
                 $class->student_id = null;
                 $class->date = tools::get_epoch_date($date, $start_hour, $start_minute);

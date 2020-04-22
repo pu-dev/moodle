@@ -31,7 +31,7 @@ class teacher_booked_lesson_list extends class_list_base {
                 teacher_id = {$USER->id} 
                 AND student_id IS NOT NULL
                 AND (lesson.date + lesson.duration) > {$time}
-                AND cm_id = {$this->cm->id}
+                AND schedule_id = {$this->cm->instance}
 
             ORDER BY 
                 lesson.date ASC

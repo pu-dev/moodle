@@ -6,18 +6,10 @@ mod_require_once('/components/class_list_base.php');
 
 
 class student_book_class_list extends class_list_base {
-
-    /**
-     *
-     */
     public function __construct($cm) {
         parent::__construct($cm);
     }
 
-
-    /**
-     *
-     */
     protected function get_sql_query() {
         global $USER;
 
@@ -31,7 +23,7 @@ class student_book_class_list extends class_list_base {
                     student_user.id is null
                 ) 
                 AND date > {$time}
-                AND cm_id = {$this->cm->id}
+                AND schedule_id = {$this->cm->instance}
 
             ORDER BY 
                 lesson.date ASC,
