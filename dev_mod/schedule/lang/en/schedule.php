@@ -29,6 +29,9 @@ $string['teacher_booked_class'] = 'Booked classes';
 $string['no_student'] = 'none';
 
 
+$string['lesson_limit_value_help'] = 'Specify maximum number of lessons for all students in a given time period';
+$string['lesson_limit_period_help'] = 'Choose lesson limit time period';
+
 $string['addmoreschedules'] = 'Add more schedules1';
 $string['allowupdate'] = 'Allow schedule to be updated';
 $string['allowmultiple'] = 'Allow more than one schedule to be selected';

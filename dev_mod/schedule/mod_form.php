@@ -37,6 +37,7 @@ class mod_schedule_mod_form extends moodleform_mod {
         $mform->setExpanded('limits', true);
 
         // Limit value
+        //
         $limit_value = $mform->addElement(
             'text', 
             'lesson_limit_value', 
@@ -45,10 +46,17 @@ class mod_schedule_mod_form extends moodleform_mod {
         );
         $mform->setType('lesson_limit_value', PARAM_INT);
         $mform->setDefault('lesson_limit_value', 0);
+        $mform->addHelpButton(
+            'lesson_limit_value', 
+            'lesson_limit_value',
+            'schedule');
+        $mform->addRule('lesson_limit_value', 'value required', 'required', null, 'client');
+        $mform->addRule('lesson_limit_value', get_string('maximumchars', '', 2), 'maxlength', 2, 'client');
+        $mform->addRule('lesson_limit_value', 'use only numbers', 'numeric', null, 'client');
 
-        // $mform->addHelpButton('lesson_limit_value', 'todo_fix_me','schedule');
 
         // Limit period
+        //
         $limit_period = $mform->addElement(
             'select', 
             'lesson_limit_period', 
@@ -60,11 +68,9 @@ class mod_schedule_mod_form extends moodleform_mod {
             )
         );
         $mform->setDefault('lesson_limit_period', '1');
-
-        $mform->addRule('lesson_limit_value', 'value required', 'required', null, 'client');
-        $mform->addRule('lesson_limit_value', get_string('maximumchars', '', 2), 'maxlength', 2, 'client');
-        $mform->addRule('lesson_limit_value', 'use only numbers', 'numeric', null, 'client');
-
-        // $mform->addHelpButton('lesson_limit_period', 'todo_fix_me','schedule');
+        $mform->addHelpButton(
+            'lesson_limit_period', 
+            'lesson_limit_period',
+            'schedule');
     }
 }

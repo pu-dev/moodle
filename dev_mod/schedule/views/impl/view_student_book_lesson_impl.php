@@ -82,7 +82,7 @@ class view_student_book_lesson_impl extends view_student_base_impl {
                 $limit_period = strtolower($this->schedule->lesson_limit_period);
                 $limit_value = $this->schedule->lesson_limit_value;
 
-                $msg = "Only {$limit_value} class(es) a {$limit_period} can be booked.";
+                $msg = "Only {$limit_value} class(es) a {$limit_period} can be booked in this course";
                 $html = $this->alert_error($msg);
                 break;
             
