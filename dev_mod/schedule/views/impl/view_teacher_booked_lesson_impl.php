@@ -2,10 +2,12 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once(dirname(__FILE__).'/../../inc.php');
+// mod_require_once('/views/impl/view_teacher_paginated_base_impl.php');
 mod_require_once('/views/impl/view_teacher_base_impl.php');
 mod_require_once('/components/teacher_booked_lesson_list.php');
 
 
+// class view_teacher_booked_lesson_impl extends view_teacher_paginated_base_impl {
 class view_teacher_booked_lesson_impl extends view_teacher_base_impl {
     public function __construct() {
         parent::__construct(teacher_class_tabs::TAB_BOOKED_LESSON);
