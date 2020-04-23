@@ -82,31 +82,18 @@ function schedule_extend_settings_navigation(settings_navigation $settings, navi
         $schedulenode->add_node($node, $beforekey);
 }
 
-
-
-function __get_schedule_db_record($schedule) {
-    $schedule_fixed = new stdClass;
-    $schedule_fixed->course = $schedule->course;
-    $schedule_fixed->name = $schedule->name;
-    $schedule_fixed->intro = '';
-    $schedule_fixed->introformat = 1;
-    $schedule_fixed->timemodified = time();
-
-    $schedule_fixed->lesson_limit_value = $schedule->lesson_limit_value;
-    $schedule_fixed->lesson_limit_period = $schedule->lesson_limit_period;
-
-    return $schedule_fixed;
-}
-/**
- *
- * Add 'Schedule' activity to course.
- *
- */
-
 function schedule_add_instance($schedule) {
     global $DB;
 
-    $schedule_fixed = __get_schedule_db_record($schedule);
+    $schedule_fixed = new stdClass;
+    $schedule_fixed->course = $schedule->course;
+    $schedule_fixed->name = $schedule->name;
+    $schedule_fixed->intro = $schedule->introeditor['text'];
+    $schedule_fixed->introformat = $schedule->introeditor['format'];
+    $schedule_fixed->timemodified = time();
+    $schedule_fixed->lesson_limit_value = $schedule->lesson_limit_value;
+    $schedule_fixed->lesson_limit_period = $schedule->lesson_limit_period;
+
     $schedule_fixed->id = $DB->insert_record(
         "schedule", 
         $schedule_fixed);
@@ -128,18 +115,57 @@ function schedule_add_instance($schedule) {
 function schedule_update_instance($schedule) {
     global $DB;
 
-    $schedule_fixed = __get_schedule_db_record($schedule);
-    $schedule_fixed->id = $schedule->instance;
+    $schedule->timemodified = time();
+    $schedule->id = $schedule->instance;
+
+    // $schedule_fixed = __get_schedule_db_record($schedule);
+    // $schedule_fixed->id = $schedule->instance;
     return $DB->update_record(
         "schedule",
-        $schedule_fixed);
+        $schedule);
 }
 
 
 
+/**
+ * Given an ID of an instance of this module,
+ * this function will permanently delete the instance
+ * and any data that depends on it.
+ *
+ * @global object
+ * @param int $id
+ * @return bool
+ */
 
+# todo
+function schedule_delete_instance($id) {
+    error_log("delteet");
+    global $DB;
 
+    if (! $schedule = $DB->get_record("schedule", array("id"=>"$id"))) {
+        return false;
+    }
 
+    $result = true;
+
+    if (! $DB->delete_records("schedule_answers", array("scheduleid"=>"$schedule->id"))) {
+        $result = false;
+    }
+
+    if (! $DB->delete_records("schedule_options", array("scheduleid"=>"$schedule->id"))) {
+        $result = false;
+    }
+
+    if (! $DB->delete_records("schedule", array("id"=>"$schedule->id"))) {
+        $result = false;
+    }
+    // Remove old calendar events.
+    if (! $DB->delete_records('event', array('modulename' => 'schedule', 'instance' => $schedule->id))) {
+        $result = false;
+    }
+
+    return $result;
+}
 
 
 
@@ -675,43 +701,6 @@ function schedule_delete_responses($attemptids, $schedule, $cm, $course) {
 
 
 /**
- * Given an ID of an instance of this module,
- * this function will permanently delete the instance
- * and any data that depends on it.
- *
- * @global object
- * @param int $id
- * @return bool
- */
-function schedule_delete_instance($id) {
-    global $DB;
-
-    if (! $schedule = $DB->get_record("schedule", array("id"=>"$id"))) {
-        return false;
-    }
-
-    $result = true;
-
-    if (! $DB->delete_records("schedule_answers", array("scheduleid"=>"$schedule->id"))) {
-        $result = false;
-    }
-
-    if (! $DB->delete_records("schedule_options", array("scheduleid"=>"$schedule->id"))) {
-        $result = false;
-    }
-
-    if (! $DB->delete_records("schedule", array("id"=>"$schedule->id"))) {
-        $result = false;
-    }
-    // Remove old calendar events.
-    if (! $DB->delete_records('event', array('modulename' => 'schedule', 'instance' => $schedule->id))) {
-        $result = false;
-    }
-
-    return $result;
-}
-
-/**
  * Returns text string which is the answer that matches the id
  *
  * @global object
@@ -880,14 +869,14 @@ function schedule_get_response_data($schedule, $cm, $groupmode, $onlyactive) {
  */
 function schedule_supports($feature) {
     switch($feature) {
-        case FEATURE_GROUPS:                  return true;
-        case FEATURE_GROUPINGS:               return true;
+        case FEATURE_GROUPS:                  return false;
+        case FEATURE_GROUPINGS:               return false;
         case FEATURE_MOD_INTRO:               return true;
-        case FEATURE_COMPLETION_TRACKS_VIEWS: return true;
-        case FEATURE_COMPLETION_HAS_RULES:    return true;
+        case FEATURE_COMPLETION_TRACKS_VIEWS: return false;
+        case FEATURE_COMPLETION_HAS_RULES:    return false;
         case FEATURE_GRADE_HAS_GRADE:         return false;
         case FEATURE_GRADE_OUTCOMES:          return false;
-        case FEATURE_BACKUP_MOODLE2:          return true;
+        case FEATURE_BACKUP_MOODLE2:          return false;
         case FEATURE_SHOW_DESCRIPTION:        return true;
 
         default: return null;

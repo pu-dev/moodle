@@ -29,8 +29,10 @@ $string['teacher_booked_class'] = 'Booked classes';
 $string['no_student'] = 'none';
 
 
-$string['lesson_limit_value_help'] = 'Specify maximum number of lessons for all students in a given time period';
-$string['lesson_limit_period_help'] = 'Choose lesson limit time period';
+$string['lesson_limit_value'] = 'todo ?';
+$string['lesson_limit_value_help'] = 'Maximum number of lessons for all students in a given time period. 0 means unlimited.';
+$string['lesson_limit_period'] = 'todo ?';
+$string['lesson_limit_period_help'] = 'Lesson limit time period length.';
 
 $string['addmoreschedules'] = 'Add more schedules1';
 $string['allowupdate'] = 'Allow schedule to be updated';

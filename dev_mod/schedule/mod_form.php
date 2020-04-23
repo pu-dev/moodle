@@ -10,6 +10,7 @@ class mod_schedule_mod_form extends moodleform_mod {
 
     function definition() {
         $this->add_module_name();
+        $this->standard_intro_elements();
         $this->add_student_limits();
         $this->standard_coursemodule_elements();
         $this->add_action_buttons();
@@ -41,8 +42,8 @@ class mod_schedule_mod_form extends moodleform_mod {
         $limit_value = $mform->addElement(
             'text', 
             'lesson_limit_value', 
-            'Lesson count', 
-            array('size'=>'8')
+            'Lessons count', 
+            array('size' => '8')
         );
         $mform->setType('lesson_limit_value', PARAM_INT);
         $mform->setDefault('lesson_limit_value', 0);
@@ -64,8 +65,7 @@ class mod_schedule_mod_form extends moodleform_mod {
             array(
                 'month' => 'month',
                 // 'fortnight' => 'fortnight',
-                'week' => 'week'
-            )
+                'week' => 'week')
         );
         $mform->setDefault('lesson_limit_period', '1');
         $mform->addHelpButton(
