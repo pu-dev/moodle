@@ -66,13 +66,17 @@ abstract class class_list_base implements \renderable {
     final private function __get_txt_cell($txt) {
         # todo 
         $blank_msg = "[ blank ]";
+        $blank_msg_html = \html_writer::tag(
+            'nobr', 
+            $blank_msg
+        );
 
         if ( ! isset($txt) ) {
-            return $blank_msg;
+            return $blank_msg_html;
         }
 
         if ( strlen($txt) == 0 ) {
-            return $blank_msg;
+            return $blank_msg_html;
         }
 
         return nl2br($txt);
@@ -142,6 +146,25 @@ abstract class class_list_base implements \renderable {
 
         $html .= \html_writer::end_tag('form');
         return $html;
+    }
+
+    final protected function get_cell_action_edit_lesson($lesson, $form_url) {
+        # todo
+        $label = 'Edit';
+        $action = null;
+        $final_url = tools::get_self_local_url();
+
+        $url_params = [
+            'lesson_id' => $lesson->lesson_id,
+            'final_url' => $final_url
+        ];
+
+        return $this->get_cell_action(
+            $label, 
+            $lesson, 
+            $action, 
+            $form_url, 
+            $url_params);
     }
 
     abstract protected function create_table($records);

@@ -11,8 +11,9 @@ class view_teacher_edit_lesson_impl extends view_edit_lesson_base_impl {
     public function __construct() {
         $class_form = 'teacher_edit_lesson_form';
         $class_form_handler = 'teacher_edit_lesson_form_handler';
-        $final_url = '/views/view_teacher_old_lesson.php';
 
-        parent::__construct($class_form, $class_form_handler, $final_url);
+        parent::__construct(
+            $class_form, 
+            $class_form_handler);
     }
 }

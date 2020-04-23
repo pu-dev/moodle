@@ -8,31 +8,45 @@ class tools {
     const MINUTES_IN_HOUR = 60;
     const SECONDS_IN_MINUTE = 60;
 
-    public static function get_self_url($url_params=null) {
+
+    public static function get_self_local_url() {
         $src_url = $_SERVER['PHP_SELF'];
 
         if ( preg_match('/\/mod\/schedule\/.*\.php/', $src_url, $match) == 0 ) {
             die("Problem with retrieving self url.");
         }
 
-        $url = new \moodle_url($match[0], $url_params);
+        return $match[0];
+    }
+    
+
+    public static function get_self_url($url_params=null) {
+        $local_url = self::get_self_local_url($url_params);
+        $url = new \moodle_url($local_url, $url_params);
         return $url;
     }
 
 
-    public static function get_module_url($url_postfix='', $url_params=array()) {
+    public static function get_moodle_url($url_postfix='', $url_params=array()) {
         $url = new \moodle_url(
-            "/mod/schedule/" . $url_postfix,
+            $url_postfix,
             $url_params
         );
         return $url;
     }
 
+
+    public static function get_module_url($url_postfix='', $url_params=array()) {
+        return self::get_moodle_url(
+            "/mod/schedule/" . $url_postfix, 
+            $url_params);
+    }
+
+
     public static function get_cmid() {
         return required_param('id', PARAM_INT);
 
     }
-
 
     public static function is_student($cmid = null) {
         if (is_null($cmid)) {
@@ -53,7 +67,6 @@ class tools {
         return has_capability('mod/schedule:teacher', $context);
     }
 
-
     public static function is_editingteacher($cmid = null) {
         if (is_null($cmid)) {
             $cmid = self::get_cmid();
@@ -62,7 +75,6 @@ class tools {
         $context = \context_module::instance($cmid);
         return has_capability('mod/schedule:editingteacher', $context);
     }
-
 
     public static function is_manager($cmid = null) {
         if (is_null($cmid)) {
@@ -80,12 +92,17 @@ class tools {
         return $date;
     }
 
+    public static function epoch_to_time($seconds, $nobr=false) {
+        $date = \userdate($seconds, '%H:%M');
+        if ( $nobr ) {
+            $date = "<nobr>{$date}</nobr>";
+        }
+        return $date;
+    }
 
     public static function truncate($txt, $len) {
         return strlen($in) > $len ? substr($in, 0, $len)."..." : $in;
     }
-
-
 
     public static function get_duration($start_hour, $start_minute, $end_hour, $end_minute) {
         $duration = (

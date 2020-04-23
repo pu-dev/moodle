@@ -2,10 +2,10 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once(dirname(__FILE__).'/../inc.php');
-mod_require_once('/components/class_list_base.php');
+mod_require_once('/components/student_class_list_base.php');
 
 
-class student_new_lesson_list extends class_list_base {
+class student_new_lesson_list extends student_class_list_base {
 
     public function __construct($cm) {
         parent::__construct($cm);
@@ -37,17 +37,23 @@ class student_new_lesson_list extends class_list_base {
         $table->width = '100%';
 
         $table->head = array(
+            'Action',
             'Teacher',
             'Date',
             'Time',
-            'Duration'
+            'Duration',
+            'Topic',
+            'Notes'
         );
 
         foreach ($records as $id => $class) {
+            $table->data[$id][] = $this->get_cell_student_action_edit_lesson($class);
             $table->data[$id][] = $class->teacher_name;
             $table->data[$id][] = $this->get_cell_date($class);
             $table->data[$id][] = $this->get_cell_time($class);
             $table->data[$id][] = $this->get_cell_duration($class);
+            $table->data[$id][] = $this->get_cell_topic($class);
+            $table->data[$id][] = $this->get_cell_notes($class);
         }
 
         return $table;

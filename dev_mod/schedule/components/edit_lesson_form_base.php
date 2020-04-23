@@ -6,21 +6,24 @@ require_once($CFG->libdir.'/formslib.php');
 
 
 abstract class edit_lesson_form_base extends \moodleform {
-    const COLUMNS = 40;
-    const NOTES_ROWS = 12;
+    private const COLUMNS = 40;
+    private const NOTES_ROWS = 12;
 
     protected $lesson;
+    protected $final_url;
 
     /**
     */
     public function definition() {
         $this->lesson = $this->_customdata['lesson'];
+        $this->final_url = $this->_customdata['final_url'];
 
         $this->create_date();
         $this->create_topic();
         $this->create_notes();
         $this->create_buttons();
         $this->create_lesson_id();
+        $this->create_final_url();
     }
 
 
@@ -59,20 +62,46 @@ abstract class edit_lesson_form_base extends \moodleform {
 
     protected function create_date() {
         $mform =& $this->_form;
-        $mform->addElement(
+        
+        $input_date = $mform->createElement(
             'text', 
             'date',
-            # todo
-            'Date',
+            '',
             array(
-                'size' => self::COLUMNS,
+                'size' => self::COLUMNS / 2 - 3,
+                'disabled' => null
+            )
+        );
+        $date = tools::epoch_to_date($this->lesson->date);
+        $mform->setType('date', PARAM_NOTAGS);
+        $mform->setDefault('date', $date);
+
+
+        $input_time = $mform->createElement(
+            'text', 
+            'time',
+            '',
+            array(
+                'size' => self::COLUMNS / 2 - 2,
                 'disabled' => null
             )
         );
 
-        $date = tools::epoch_to_date($this->lesson->date);
-        $mform->setType('date', PARAM_NOTAGS);
-        $mform->setDefault('date', $date);
+        $time = tools::epoch_to_time($this->lesson->date);
+        $mform->setType('time', PARAM_NOTAGS);
+        $mform->setDefault('time', $time);
+
+        $group = array(
+            $input_date,
+            $input_time);
+
+        # todo
+        $mform->addGroup(
+            $group, 
+            '', 
+            'Date', 
+            array(' '), 
+            false);
     }
 
 
@@ -86,10 +115,18 @@ abstract class edit_lesson_form_base extends \moodleform {
 
     protected function create_buttons() {
         $mform =& $this->_form;
-
         $buttonarray = array();
         $buttonarray[] =& $mform->createElement('submit', 'submitbutton', get_string('savechanges'));
         $buttonarray[] =& $mform->createElement('cancel', 'cancel', get_string('cancel'));
         $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
     }
+
+
+    protected function create_final_url() {
+        $mform =& $this->_form;
+        $mform->addElement('hidden', 'final_url');
+        $mform->setType('final_url', PARAM_LOCALURL);
+        $mform->setDefault('final_url', $this->final_url);
+    }
+
 }

@@ -2,10 +2,10 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once(dirname(__FILE__).'/../inc.php');
-mod_require_once('/components/class_list_base.php');
+mod_require_once('/components/student_class_list_base.php');
 
 
-class student_book_class_list extends class_list_base {
+class student_book_class_list extends student_class_list_base {
     public function __construct($cm) {
         parent::__construct($cm);
     }

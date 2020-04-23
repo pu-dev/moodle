@@ -2,10 +2,10 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once(dirname(__FILE__).'/../inc.php');
-mod_require_once('/components/class_list_base.php');
+mod_require_once('/components/teacher_class_list_base.php');
 
 
-class teacher_old_lesson_list extends class_list_base {
+class teacher_old_lesson_list extends teacher_class_list_base {
 
     public function __construct($cm) {
         parent::__construct($cm);
@@ -40,32 +40,20 @@ class teacher_old_lesson_list extends class_list_base {
         $table->head = array(
             # todo
             'Action',
-            'Topic',
-            'Notes',
             'Student',
             'Date',
+            'Topic',
+            'Notes',
         );
 
         foreach ($records as $id => $class) {
-            $table->data[$id][] = $this->get_cell_action_button($class);
-            $table->data[$id][] = $this->get_cell_topic($class);
-            $table->data[$id][] = $this->get_cell_notes($class);
+            $table->data[$id][] = $this->get_cell_teacher_action_edit_lesson($class);
             $table->data[$id][] = $class->student_name;
             $table->data[$id][] = $this->get_cell_date($class);
+            $table->data[$id][] = $this->get_cell_topic($class);
+            $table->data[$id][] = $this->get_cell_notes($class);
         }
 
         return $table;
-    }
-
-    private function get_cell_action_button($class) {
-        # todo
-        $label = 'Edit';
-        $action = null;
-        $url = 'views/view_teacher_edit_lesson.php';
-        $url_params = [
-            'lesson_id' => $class->lesson_id
-        ];
-
-        return $this->get_cell_action($label, $class, $action, $url, $url_params);
     }
 }

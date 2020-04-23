@@ -12,15 +12,15 @@ abstract class view_edit_lesson_base_impl extends view_base_impl {
     private $final_url;
 
 
-    public function __construct($class_form, $class_form_handler, $final_url) {
+    public function __construct($class_form, $class_form_handler) {
         parent::__construct();
 
         $this->lesson_id = required_param('lesson_id', PARAM_INT);
 
         $this->form = "\\mod_schedule\\{$class_form}";
         $this->form_handler = "\\mod_schedule\\{$class_form_handler}";
-        $this->final_url = $final_url;
-
+    
+        $this->final_url = required_param('final_url', PARAM_LOCALURL);
     }
 
     protected function render() {
@@ -41,7 +41,10 @@ abstract class view_edit_lesson_base_impl extends view_base_impl {
         );
 
         $url = tools::get_self_url($url_params);
-        $form_data = array('lesson'=>$lesson);
+        $form_data = array(
+            'lesson' => $lesson,
+            'final_url' => $this->final_url
+        );
 
         return new $this->form($url, $form_data);
     }
@@ -62,7 +65,7 @@ abstract class view_edit_lesson_base_impl extends view_base_impl {
 
     private function redirect() {
         $url_params = array('id' => $this->cm->id);
-        $url = tools::get_module_url($this->final_url, $url_params);
+        $url = tools::get_moodle_url($this->final_url, $url_params);
 
         return new view_result_redirect($url);
     }

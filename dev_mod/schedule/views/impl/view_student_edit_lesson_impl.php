@@ -11,9 +11,9 @@ class view_student_edit_lesson_impl extends view_edit_lesson_base_impl {
     public function __construct() {
         $class_form = 'student_edit_lesson_form';
         $class_form_handler = 'student_edit_lesson_form_handler';
-        $final_url = '/views/view_student_old_lesson.php';
 
-        parent::__construct($class_form, $class_form_handler, $final_url);
+        parent::__construct(
+            $class_form, 
+            $class_form_handler);
     }
-
 }
