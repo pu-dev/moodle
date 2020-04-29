@@ -1,4 +1,4 @@
-define(['mod_schedule/calendar_config'], function() { 
+define(['mod_schedule/calendar_config'], function() {
   return {
     bookedLessonBorderColor: '#659D32',
     bookedLessonBackgroundColor: '#BDFCC9',

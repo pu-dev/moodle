@@ -16,7 +16,7 @@ define([
   CalendarConfig,
   Urls,
   HTTP_response
-) { 
+) {
 
 function epochToDate(seconds) {
   const date = new Date(0);
@@ -27,7 +27,7 @@ function epochToDate(seconds) {
 function epochToDateFormatted(seconds) {
   const date = epochToDate(seconds);
 
-  const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date);
+  // const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date);
   const mo = new Intl.DateTimeFormat('en', { month: 'long' }).format(date);
   const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(date);
   const h = new  Intl.DateTimeFormat('en', { hour: '2-digit',  hour12: false }).format(date);
@@ -43,7 +43,7 @@ function Calendar(phpOpts) {
   this.phpOpts = phpOpts;
 
   this.calendarEl = document.getElementById('calendar');
-  
+
   this.calendar = new FullCalendar.Calendar(this.calendarEl, {
     plugins: [ 'interaction', 'dayGrid', 'timeGrid', 'list' ],
     defaultView: 'dayGridMonth',
@@ -57,7 +57,7 @@ function Calendar(phpOpts) {
     displayEventEnd: true,
     editable: false,
     eventClick: function(info) {
-      self.lessonOnClick(info.event.extendedProps.lesson, info.event);
+      self.lessonOnClick(info.event.extendedProps.lesson);
     },
     eventMouseEnter: function(info) {
       self.lessonOnMouseEnter(info);
@@ -77,11 +77,11 @@ function Calendar(phpOpts) {
 
 Calendar.prototype.render = function() {
   this.calendar.render();
-}
+};
 
 Calendar.prototype.raw = function() {
   return this.calendar;
-}
+};
 
 Calendar.prototype.addLesson = function(lesson) {
   let dateStart = epochToDate(lesson.date);
@@ -101,33 +101,32 @@ Calendar.prototype.addLesson = function(lesson) {
   if ( lesson.student_id !== null ) {
     event.borderColor = CalendarConfig.bookedLessonBorderColor;
     event.backgroundColor = CalendarConfig.bookedLessonBackgroundColor;
-  } 
+  }
   else {
     event.borderColor = CalendarConfig.availableLessonBorderColor;
     event.backgroundColor = CalendarConfig.availableLessonBackgroundColor;
   }
 
   this.calendar.addEvent(event);
-}
+};
 
 Calendar.prototype.addLessons = function(lessons) {
   let keys = Object.keys(lessons);
-  for (key of keys) {
+  for (let key of keys) {
     this.addLesson(lessons[key]);
   }
-}
+};
 
-Calendar.prototype.lessonOnClick = function(lesson, event) {
+Calendar.prototype.lessonOnClick = function(lesson) {
   if (lesson.student_id === null ) {
     this.bookLesson(lesson);
   }
   else {
     this.unbookLesson(lesson);
   }
-}
+};
 
 Calendar.prototype.bookLesson = function(lesson) {
-  let self = this;
   let url = this.getUrl(Urls.studentBookLesson);
 
   fetch(url, {
@@ -140,7 +139,6 @@ Calendar.prototype.bookLesson = function(lesson) {
   .then(response => {
     if ( ! response.ok || response.status != HTTP_response.OK ) {
       throw `Error while booking class. Response status: ${response.status}`;
-      // error 
     }
     return response.json();
   })
@@ -151,8 +149,7 @@ Calendar.prototype.bookLesson = function(lesson) {
     // notification.alert('Error', error, 'OK');
     console.error(error);
   });
-}
-
+};
 
 Calendar.prototype.lessonBooked = function(lesson) {
   let event = this.calendar.getEventById(lesson.id);
@@ -160,21 +157,19 @@ Calendar.prototype.lessonBooked = function(lesson) {
 
   let lessonUpdated = extProps.lesson;
   lessonUpdated.student_id = lesson.student_id;
-  // todo 
-  // lessonUpdated.student_name = 
-  
+  // todo
+  // lessonUpdated.student_name =
+
   event.setProp('borderColor', CalendarConfig.bookedLessonBorderColor);
   event.setProp('backgroundColor', CalendarConfig.bookedLessonBackgroundColor);
   event.setExtendedProp('lesson', lessonUpdated);
 
   const date = epochToDateFormatted(lesson.date);
-  notification.alert('Lesson booked', 
+  notification.alert('Lesson booked',
     `Booked lesson on ${date}`, 'OK');
-
-}
+};
 
 Calendar.prototype.unbookLesson = function(lesson) {
-  let self = this;
   let url = this.getUrl(Urls.studentUnbookLesson);
 
   fetch(url, {
@@ -197,7 +192,7 @@ Calendar.prototype.unbookLesson = function(lesson) {
     // notification.alert('Error', error, 'OK');
     console.error(error);
   });
-}
+};
 
 Calendar.prototype.lessonUnbooked = function(lesson) {
   let event = this.calendar.getEventById(lesson.id);
@@ -206,17 +201,17 @@ Calendar.prototype.lessonUnbooked = function(lesson) {
   let lessonUpdated = extProps.lesson;
   lessonUpdated.student_id = null;
   lessonUpdated.student_name = null;
-  
+
   event.setProp('borderColor', CalendarConfig.availableLessonBorderColor);
   event.setProp('backgroundColor', CalendarConfig.availableLessonBackgroundColor);
   event.setExtendedProp('lesson', lessonUpdated);
 
   const date = epochToDateFormatted(lesson.date);
   notification.alert(
-    'Lesson unbooked', 
-    `Unbooked lesson on ${date}`, 
+    'Lesson unbooked',
+    `Unbooked lesson on ${date}`,
     'OK');
-}
+};
 
 Calendar.prototype.loadAvailableLessons = function() {
   let url = this.getUrl(Urls.studentGetAvailableLessons);
@@ -233,13 +228,13 @@ Calendar.prototype.loadAvailableLessons = function() {
 
   var container = $('#calendar');
   LoadingIcon.addIconToContainerRemoveOnCompletion(container, loadPromise);
-}
+};
 
 Calendar.prototype.lessonOnMouseEnter = function(info) {
-}
+};
 
 Calendar.prototype.lessonOnMouseLeave = function(info) {
-}
+};
 
 Calendar.prototype.getUrl = function (urlBase, urlParams) {
   const urlParamsFixed = {
@@ -258,8 +253,7 @@ Calendar.prototype.getUrl = function (urlBase, urlParams) {
   let url = new URL(urlBase);
   url.search = new URLSearchParams(urlParamsTmp);
   return url;
-}
-
+};
 
 return Calendar;
 

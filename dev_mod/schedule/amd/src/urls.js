@@ -1,4 +1,4 @@
-define(['mod_schedule/urls'], function() { 
+define(['mod_schedule/urls'], function() {
 
   let urlBase = `${M.cfg.wwwroot}/mod/schedule/restapi`;
 
