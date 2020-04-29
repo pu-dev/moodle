@@ -1,22 +1,41 @@
-var pu;
-
 define([
+  'jquery',
   'core/str',
   'core/notification',
   'core/loadingicon',
+  'core/modal_factory',
   'mod_schedule/calendar_config',
   'mod_schedule/urls',
-  'mod_schedule/http_response_code'
+  'mod_schedule/http_response_code',
 ], function(
+  $,
   str,
   notification,
   LoadingIcon,
+  ModalFactory,
   CalendarConfig,
   Urls,
   HTTP_response
 ) { 
 
+function epochToDate(seconds) {
+  const date = new Date(0);
+  date.setUTCSeconds(seconds);
+  return date;
+}
 
+function epochToDateFormatted(seconds) {
+  const date = epochToDate(seconds);
+
+  const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(date);
+  const mo = new Intl.DateTimeFormat('en', { month: 'long' }).format(date);
+  const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(date);
+  const h = new  Intl.DateTimeFormat('en', { hour: '2-digit',  hour12: false }).format(date);
+  const m = new Intl.DateTimeFormat('en', { minute: '2-digit', hour12: false }).format(date);
+
+  const mi = m.length == 1 ? `0${m}`: m;
+  return `${h}:${mi}, ${da}-${mo}`;
+}
 
 function Calendar(phpOpts) {
   let self = this;
@@ -32,10 +51,24 @@ function Calendar(phpOpts) {
     header: {
       left: 'dayGridDay,dayGridWeek,dayGridMonth',
       center: 'title',
-      right:  'prev,today,next '
+      right: 'prev,today,next '
     },
+    displayEventTime: true,
+    displayEventEnd: true,
+    editable: false,
     eventClick: function(info) {
       self.lessonOnClick(info.event.extendedProps.lesson, info.event);
+    },
+    eventMouseEnter: function(info) {
+      self.lessonOnMouseEnter(info);
+    },
+    eventMouseLeave: function(info) {
+      self.lessonOnMouseLeave(info);
+    },
+    eventTimeFormat: {
+      hour: 'numeric',
+      minute: '2-digit',
+      meridiem: false
     },
     dateClick: function(info) {
     }
@@ -51,11 +84,8 @@ Calendar.prototype.raw = function() {
 }
 
 Calendar.prototype.addLesson = function(lesson) {
-  let dateStart = new Date(0);
-  dateStart.setUTCSeconds(lesson.date);
-
-  let dateStop = new Date(0);
-  dateStop.setUTCSeconds(lesson.end_date);
+  let dateStart = epochToDate(lesson.date);
+  let dateStop = epochToDate(lesson.end_date);
 
   let event = {
     id: lesson.lesson_id,
@@ -70,9 +100,11 @@ Calendar.prototype.addLesson = function(lesson) {
 
   if ( lesson.student_id !== null ) {
     event.borderColor = CalendarConfig.bookedLessonBorderColor;
+    event.backgroundColor = CalendarConfig.bookedLessonBackgroundColor;
   } 
   else {
     event.borderColor = CalendarConfig.availableLessonBorderColor;
+    event.backgroundColor = CalendarConfig.availableLessonBackgroundColor;
   }
 
   this.calendar.addEvent(event);
@@ -95,7 +127,6 @@ Calendar.prototype.lessonOnClick = function(lesson, event) {
 }
 
 Calendar.prototype.bookLesson = function(lesson) {
-  console.log("book lesson");
   let self = this;
   let url = this.getUrl(Urls.studentBookLesson);
 
@@ -117,7 +148,7 @@ Calendar.prototype.bookLesson = function(lesson) {
     this.lessonBooked(json.data.lesson);
   })
   .catch(function(error){
-    // Todo message about failuer
+    // notification.alert('Error', error, 'OK');
     console.error(error);
   });
 }
@@ -133,12 +164,16 @@ Calendar.prototype.lessonBooked = function(lesson) {
   // lessonUpdated.student_name = 
   
   event.setProp('borderColor', CalendarConfig.bookedLessonBorderColor);
+  event.setProp('backgroundColor', CalendarConfig.bookedLessonBackgroundColor);
   event.setExtendedProp('lesson', lessonUpdated);
+
+  const date = epochToDateFormatted(lesson.date);
+  notification.alert('Lesson booked', 
+    `Booked lesson on ${date}`, 'OK');
+
 }
 
 Calendar.prototype.unbookLesson = function(lesson) {
-  console.log("unbook lesson");
-  console.log(lesson);
   let self = this;
   let url = this.getUrl(Urls.studentUnbookLesson);
 
@@ -159,6 +194,7 @@ Calendar.prototype.unbookLesson = function(lesson) {
     this.lessonUnbooked(json.data.lesson);
   })
   .catch(function(error){
+    // notification.alert('Error', error, 'OK');
     console.error(error);
   });
 }
@@ -172,22 +208,37 @@ Calendar.prototype.lessonUnbooked = function(lesson) {
   lessonUpdated.student_name = null;
   
   event.setProp('borderColor', CalendarConfig.availableLessonBorderColor);
+  event.setProp('backgroundColor', CalendarConfig.availableLessonBackgroundColor);
   event.setExtendedProp('lesson', lessonUpdated);
+
+  const date = epochToDateFormatted(lesson.date);
+  notification.alert(
+    'Lesson unbooked', 
+    `Unbooked lesson on ${date}`, 
+    'OK');
 }
 
 Calendar.prototype.loadAvailableLessons = function() {
   let url = this.getUrl(Urls.studentGetAvailableLessons);
 
-  fetch(url)
+  let loadPromise = fetch(url)
     .then(res => res.json())
     .then(res => {
-      console.log(res);
       this.addLessons(res.data.lessons);
       this.render();
     })
     .catch(function(error) {
       console.error(error);
     });
+
+  var container = $('#calendar');
+  LoadingIcon.addIconToContainerRemoveOnCompletion(container, loadPromise);
+}
+
+Calendar.prototype.lessonOnMouseEnter = function(info) {
+}
+
+Calendar.prototype.lessonOnMouseLeave = function(info) {
 }
 
 Calendar.prototype.getUrl = function (urlBase, urlParams) {

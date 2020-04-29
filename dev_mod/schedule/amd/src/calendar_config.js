@@ -1,6 +1,8 @@
 define(['mod_schedule/calendar_config'], function() { 
   return {
-    bookedLessonBorderColor: 'red',
-    availableLessonBorderColor: 'green',
+    bookedLessonBorderColor: '#659D32',
+    bookedLessonBackgroundColor: '#BDFCC9',
+    availableLessonBorderColor: '#659D32',
+    availableLessonBackgroundColor: 'rgb(255, 255, 255)',
   };
 });
