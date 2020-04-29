@@ -1,5 +1,10 @@
 <?php
 
+
+$string['modulename'] = 'Schedule';
+$string['modulename_help'] = 'The schedule activity module enables to schedule one on one classes.';
+
+
 $string['modulename'] = 'Schedule';
 
 $string['book'] = 'Book';
@@ -96,16 +101,6 @@ $string['indicator:socialbreadthdef_link'] = 'Learning_analytics_indicators#Soci
 $string['limit'] = 'Limit';
 $string['limitno'] = 'Limit {no}';
 $string['limitanswers'] = 'Limit the number of responses allowed';
-$string['modulename'] = 'Schedule';
-$string['modulename_help'] = 'The schedule activity module enables a teacher to ask a single question and offer a selection of possible responses.
-
-Schedule results may be published after students have answered, after a certain date, or not at all. Results may be published with student names or anonymously.
-
-A schedule activity may be used
-
-* As a quick poll to stimulate thinking about a topic
-* To quickly test students\' understanding
-* To facilitate student decision-making, for example allowing students to vote on a direction for the course';
 $string['modulename_link'] = 'mod/schedule/view';
 $string['modulenameplural'] = 'Schedules';
 $string['moveselectedusersto'] = 'Move selected users to...';
