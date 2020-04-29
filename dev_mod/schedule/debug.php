@@ -17,7 +17,10 @@ function my_log($log_msg)
         $log_msg = 'EMPTY MSG';
     }
     $time_stamp = date('Y-M-d H:i:s');
-    $log_msg = "[{$time_stamp} {$USER->username}] {$log_msg}";
+    $log_msg = "[{$time_stamp}] {$log_msg}";
+    if ( isset ($USER->username)) {
+        $log_msg = "[{$time_stamp} {$USER->username}] {$log_msg}";
+    }
     $log_filename = "/var/log/moodle_plugin.log";
     $log_file_data = $log_filename.'/log_' . date('d-M-Y') . '.log';
     // if you don't add `FILE_APPEND`, the file will be erased each time you add a log
