@@ -7,7 +7,6 @@ abstract class action_base {
     abstract public function execute();
 }
 
-
 class action_result {
     public $status;
     public $data;

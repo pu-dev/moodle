@@ -17,26 +17,24 @@ abstract class view_base_impl {
 
         // Get course module obj
         //
-        if (! $cm = get_coursemodule_from_id('schedule', $cmid)) {
+        if (! $this->cm = get_coursemodule_from_id('schedule', $cmid)) {
             print_error('invalidcoursemodule');
         }
-
-        $this->cm = $cm;
 
         // Get course obj
         //
-        if (! $course = $DB->get_record("course", array("id" => $cm->course))) {
+        if (! $course = $DB->get_record("course", array("id" => $this->cm->course))) {
             print_error('coursemisconf');
         }
 
-        require_login($course, true, $cm);
+        require_login($course, false, $this->cm);
         // require_course_login($course, false, $cm);
 
-        if (! $this->schedule = schedule_get_schedule($cm->instance)) {
+        if (! $this->schedule = schedule_get_schedule($this->cm->instance)) {
             print_error('invalidcoursemodule');
         }
 
-        $url_params = array('id' => $cm->id);
+        $url_params = array('id' => $this->cm->id);
         $url_self = tools::get_self_url($url_params);
         debug("Set self url for the page: $url_self");
 

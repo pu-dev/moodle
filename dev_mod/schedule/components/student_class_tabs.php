@@ -9,6 +9,7 @@ class student_class_tabs extends tabs_base implements \renderable {
     public const TAB_BOOK_LESSON = 1;
     public const TAB_NEW_LESSON = 2;
     public const TAB_OLD_LESSON = 3;
+    public const TAB_BOOK_LESSON_CALENDAR = 4;
 
     public function __construct($cmid, $current_tab) {
         parent::__construct($cmid, $current_tab);
@@ -35,6 +36,12 @@ class student_class_tabs extends tabs_base implements \renderable {
             self::TAB_OLD_LESSON,
             "views/view_student_old_lesson.php",
             "Passed classes"
+        );
+
+        $tabs[] = $this->create_tab(
+            self::TAB_BOOK_LESSON_CALENDAR,
+            "views/view_student_book_lesson_calendar.php",
+            "Book class calendar (testing)"
         );
 
         return array($tabs);
